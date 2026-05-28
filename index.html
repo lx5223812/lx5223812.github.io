@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>广州红旗村 | 红色·故土·新生 | 百年乡村变迁时间轴</title>
-    <!-- Google Fonts & 基础样式重置 -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <title>红旗村 · 百年纪事 | 广州白云</title>
+    <!-- Font Awesome 6 (免费图标库，本地 fallback) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         * {
@@ -15,75 +14,63 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background: #f5f1eb;   /* 米白做旧底色，营造岁月感 */
-            color: #2c2c2c;
-            line-height: 1.5;
-            scroll-behavior: smooth;
+            font-family: 'Segoe UI', 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+            background: radial-gradient(circle at 10% 20%, #0a0c12, #030507);
+            color: #ededee;
+            overflow-x: hidden;
         }
 
         /* 主容器 */
-        .timeline-container {
+        .timeline-wrapper {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 2rem 2rem 4rem 2rem;
+            padding: 3rem 2rem 5rem 2rem;
         }
 
-        /* 页眉 */
+        /* 头部 */
         .hero {
-            text-align: center;
-            margin-bottom: 3rem;
-            border-bottom: 2px solid #c73b1e;
-            display: inline-block;
-            width: 100%;
-            padding-bottom: 1.5rem;
+            margin-bottom: 4rem;
+            border-left: 5px solid #e2583e;
+            padding-left: 1.8rem;
         }
         .hero h1 {
-            font-size: 3.2rem;
-            font-weight: 700;
+            font-size: 3.8rem;
+            font-weight: 800;
             letter-spacing: -0.02em;
-            background: linear-gradient(135deg, #9e2a1f, #5e1b0f);
+            background: linear-gradient(135deg, #fff, #e0b9a4);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            margin-bottom: 0.5rem;
         }
         .hero .sub {
-            font-size: 1.1rem;
-            color: #6b4c3b;
-            font-weight: 400;
-            border-top: 1px solid #e2dcd5;
-            display: inline-block;
-            padding-top: 0.75rem;
+            font-size: 1.2rem;
+            color: #bfa690;
             margin-top: 0.5rem;
-        }
-        .hero .stats {
             display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-top: 1.5rem;
             flex-wrap: wrap;
-            font-size: 0.9rem;
-            background: #fff6ef;
-            padding: 0.8rem 1.5rem;
-            border-radius: 60px;
-            width: fit-content;
-            margin-left: auto;
-            margin-right: auto;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+            gap: 1.5rem;
         }
-        .stats span {
-            font-weight: 600;
-            color: #ac3a21;
+        .stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.2rem;
+            margin-top: 1.5rem;
+            font-size: 0.85rem;
+            color: #cbc3bc;
+        }
+        .stats i {
+            margin-right: 6px;
+            color: #e2583e;
         }
 
-        /* 横向时间轴核心—— flex 滚动区 */
+        /* 横向滚动区 */
         .timeline-scroll {
             overflow-x: auto;
             overflow-y: visible;
-            padding: 1rem 0.5rem 3rem 0.5rem;
-            scrollbar-width: thin;
+            padding: 2rem 0.5rem 3rem 0.5rem;
             cursor: grab;
+            scrollbar-width: thin;
+            scrollbar-color: #e2583e #2a2a2a;
         }
         .timeline-scroll:active {
             cursor: grabbing;
@@ -91,320 +78,246 @@
         .timeline-track {
             display: flex;
             flex-direction: row;
-            align-items: stretch;
-            gap: 1rem;
+            gap: 2rem;
             min-width: max-content;
-            padding: 2rem 1rem 1rem 1rem;
-            position: relative;
+            padding: 0 1rem;
         }
 
-        /* 统一卡片风格 —— 每个事件为一个卡片 */
+        /* 卡片样式 —— 完全参考用户提供的“ULTIMATE”风格 */
         .timeline-card {
-            width: 300px;
+            width: 320px;
             flex-shrink: 0;
-            background: white;
-            border-radius: 24px;
-            box-shadow: 0 12px 28px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.02);
-            transition: all 0.25s ease;
-            display: flex;
-            flex-direction: column;
-            border: 1px solid #f0e3da;
-            position: relative;
+            background: rgba(20, 22, 27, 0.75);
+            backdrop-filter: blur(8px);
+            border-radius: 32px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+            overflow: hidden;
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.5);
         }
         .timeline-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 22px 35px -12px rgba(0,0,0,0.2);
-            border-color: #d9bfb0;
+            transform: translateY(-8px);
+            border-color: #e2583e80;
+            box-shadow: 0 30px 40px -15px rgba(226, 88, 62, 0.2);
         }
 
-        /* 年份标签 */
+        /* 图片占位区域 —— 可以替换成真实照片 */
+        .card-img {
+            width: 100%;
+            height: 160px;
+            background-size: cover;
+            background-position: center;
+            background-color: #1e1f24;
+            position: relative;
+        }
+        /* 装饰叠加层 */
+        .card-img::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(0deg, #0a0c12 0%, transparent 60%);
+        }
+
+        /* 年份（超大字体） */
         .card-year {
-            background: #c73b1e;
-            color: white;
-            font-weight: 700;
-            font-size: 1.2rem;
-            padding: 0.45rem 1rem;
-            border-radius: 40px;
-            width: fit-content;
-            margin: -1rem 0 0 1rem;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            letter-spacing: 0.5px;
-        }
-
-        /* 卡片主体内容 */
-        .card-content {
-            padding: 1.2rem 1.2rem 1.5rem 1.2rem;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
+            font-size: 2.5rem;
+            font-weight: 800;
+            line-height: 1;
+            margin: 1rem 1.2rem 0.2rem 1.2rem;
+            letter-spacing: -0.02em;
+            background: linear-gradient(120deg, #fff, #e7c7b6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
         .card-title {
-            font-size: 1.45rem;
-            font-weight: 700;
-            margin: 0.5rem 0 0.5rem 0;
-            line-height: 1.3;
-            color: #2b241f;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin: 0.3rem 1.2rem 0.5rem 1.2rem;
+            color: #f3e9e2;
         }
         .card-desc {
-            font-size: 0.9rem;
-            color: #4f423a;
-            margin: 0.5rem 0 0.8rem 0;
-            line-height: 1.5;
+            font-size: 0.85rem;
+            color: #b9aea5;
+            margin: 0 1.2rem 1rem 1.2rem;
+            line-height: 1.45;
         }
         .card-tag {
-            margin-top: auto;
-            font-size: 0.75rem;
-            font-weight: 600;
+            margin: 0 1.2rem 1.2rem 1.2rem;
+            font-size: 0.7rem;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: #ac6b4f;
-            border-top: 1px dashed #eedfd7;
+            letter-spacing: 1px;
+            color: #e2583e;
+            border-top: 1px dashed rgba(255,255,255,0.15);
             padding-top: 0.7rem;
             display: inline-block;
         }
 
-        /* 时代分区 · 视觉引导带 */
-        .era-badge {
-            position: sticky;
-            left: 0;
-            background: #f5ebe3;
-            border-radius: 40px;
-            padding: 0.3rem 1.2rem;
-            font-weight: 700;
-            font-size: 0.9rem;
-            color: #7b4a34;
-            width: fit-content;
-            margin-bottom: 0.5rem;
-            margin-left: 0.5rem;
-            backdrop-filter: blur(2px);
-            z-index: 2;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-        }
-
-        /* 章节间大分割（移动端也友好） */
-        .section-divider {
-            background: #fff;
-            border-radius: 2rem;
-            margin: 2.5rem 0 1rem 0;
-            padding: 0.8rem 1.5rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.6rem;
-            font-weight: 700;
-            font-size: 1.5rem;
-            color: #ac3a21;
-            border-left: 8px solid #c73b1e;
-            background: #fffaf5;
-        }
-        .section-divider i {
-            font-size: 1.8rem;
-        }
-
-        /* 响应式 */
-        @media (max-width: 800px) {
-            .timeline-container {
-                padding: 1rem;
+        /* 响应式：手机变垂直，卡片宽度自动 */
+        @media (max-width: 750px) {
+            .timeline-wrapper {
+                padding: 1.5rem;
             }
             .hero h1 {
-                font-size: 2rem;
+                font-size: 2.2rem;
+            }
+            .timeline-scroll {
+                overflow-x: auto;
             }
             .timeline-card {
-                width: 270px;
+                width: 280px;
             }
         }
+
         footer {
             text-align: center;
             margin-top: 3rem;
-            font-size: 0.8rem;
-            color: #8f7a6b;
-            border-top: 1px solid #e6dbd2;
+            font-size: 0.75rem;
+            color: #6e6259;
+            border-top: 1px solid #1e1e1e;
             padding-top: 2rem;
         }
     </style>
 </head>
 <body>
-<div class="timeline-container">
+<div class="timeline-wrapper">
     <div class="hero">
-        <h1>🌾 红旗村 · 广州乡愁</h1>
-        <div class="sub">白云山北 · 百年客家潮韵 | 从童贞庄到乡村振兴</div>
+        <h1>🌾 红旗村 · 纪事</h1>
+        <div class="sub">
+            <span>📍 白云区钟落潭镇</span>
+            <span>📅 清初 — 未来</span>
+            <span>🗣️ 揭阳方言岛</span>
+        </div>
         <div class="stats">
-            <div><span>📍 白云区钟落潭镇</span> · 面积 2.35km²</div>
-            <div><span>👥 约 3150 人</span> (2020)</div>
-            <div><span>🏘️ 12 个生产社</span> · 20+ 姓氏融合</div>
-            <div><span>🗣️ 隐秘“揭阳方言岛”</span> · 200年乡音未改</div>
+            <div><i class="fas fa-people-arrows"></i> 3150人 (2020)</div>
+            <div><i class="fas fa-landmark"></i> 12个生产社 · 20+姓氏</div>
+            <div><i class="fas fa-language"></i> 潮汕方言保留200年</div>
+            <div><i class="fas fa-charging-station"></i> 45家企业入驻</div>
         </div>
     </div>
 
-    <!-- ================= 第一部分：古韵根脉·乡土记忆 ================= -->
-    <div class="section-divider">
-        <i class="fas fa-tree"></i> 古韵根脉 · 乡土记忆
-        <span style="font-size: 0.8rem; margin-left: auto; background: #e6d3c8; padding: 0.2rem 0.7rem; border-radius: 20px;">1600s — 1949</span>
-    </div>
+    <!-- 横向时间轴轨道 -->
     <div class="timeline-scroll">
         <div class="timeline-track">
+            
+            <!-- 卡片 1：潮汕先民迁入 -->
             <div class="timeline-card">
-                <div class="card-year">清朝 · 嘉庆年间</div>
-                <div class="card-content">
-                    <div class="card-title">🌱 潮汕先民跋涉北上</div>
-                    <div class="card-desc">揭阳谢、吴两姓先祖跨山越岭，落脚于广州北郊荒丘。两百年间人口从两对夫妻繁衍至超800人，保留完整的潮州方言，被誉为“广州深处的潮汕村”。</div>
-                    <div class="card-tag"><i class="fas fa-language"></i> 方言孤岛 · 文化迁移</div>
-                </div>
+                <div class="card-img" style="background-image: url('https://picsum.photos/id/104/400/200');"></div>
+                <div class="card-year">1796-1820</div>
+                <div class="card-title">🌱 潮汕先民北上</div>
+                <div class="card-desc">揭阳谢、吴两姓先祖落脚广州北郊，两百年繁衍超800人，形成广州罕见的潮汕方言岛。</div>
+                <div class="card-tag"><i class="fas fa-language"></i> 方言孤岛 · 迁徙史诗</div>
             </div>
+
+            <!-- 卡片 2：宗祠与三庄雏形 -->
             <div class="timeline-card">
-                <div class="card-year">明清 · 宗祠立基</div>
-                <div class="card-content">
-                    <div class="card-title">🏛️ 大庄祖祠与聚落</div>
-                    <div class="card-desc">村落骨架渐成，大庄、西贤庄、童贞庄三庄雏形初现。各姓氏共建祠堂、风水塘与古道，奠定岭南耕读传家的格局。</div>
-                    <div class="card-tag"><i class="fas fa-landmark"></i> 宗族 · 礼俗</div>
-                </div>
+                <div class="card-img" style="background-image: url('https://picsum.photos/id/126/400/200');"></div>
+                <div class="card-year">清中晚期</div>
+                <div class="card-title">🏛️ 宗祠立基 · 三庄成形</div>
+                <div class="card-desc">大庄、西贤庄、童贞庄雏形初现，共建祠堂、风水塘，奠定岭南耕读传家格局。</div>
+                <div class="card-tag"><i class="fas fa-tree"></i> 宗族礼俗 · 聚落根基</div>
             </div>
+
+            <!-- 卡片 3：竹料墟市与农耕 -->
             <div class="timeline-card">
-                <div class="card-year">晚清 · 民国</div>
-                <div class="card-content">
-                    <div class="card-title">🚜 田园基业 & 竹料墟市</div>
-                    <div class="card-desc">依托竹料墟商贸通道，红旗村一带盛产水稻、甘蔗与蔬果，肩挑竹器、农具供应周边三镇。</div>
-                    <div class="card-tag"><i class="fas fa-store"></i> 墟市经济 · 农耕底色</div>
-                </div>
+                <div class="card-img" style="background-image: url('https://picsum.photos/id/130/400/200');"></div>
+                <div class="card-year">晚清-民国</div>
+                <div class="card-title">🚜 墟市经济 · 田园基业</div>
+                <div class="card-desc">依托竹料墟商贸，盛产水稻、甘蔗、蔬果，肩挑竹器供应周边三镇。</div>
+                <div class="card-tag"><i class="fas fa-store"></i> 传统农商 · 墟市纽带</div>
             </div>
+
+            <!-- 卡片 4：抗战后方 -->
             <div class="timeline-card">
+                <div class="card-img" style="background-image: url('https://picsum.photos/id/135/400/200');"></div>
                 <div class="card-year">1940s</div>
-                <div class="card-content">
-                    <div class="card-title">⚔️ 抗战烽火中的隐蔽后方</div>
-                    <div class="card-desc">虽处敌后，但依靠复杂丘陵与乡勇自卫，村庄成为东江纵队游击队的秘密物资转运点之一。</div>
-                    <div class="card-tag"><i class="fas fa-star-of-life"></i> 红色星火</div>
-                </div>
+                <div class="card-title">⚔️ 烽火后方 · 红色星火</div>
+                <div class="card-desc">东江纵队游击队秘密物资转运点，村庄成为敌后隐蔽支撑。</div>
+                <div class="card-tag"><i class="fas fa-star-of-life"></i> 红色血脉</div>
             </div>
-        </div>
-    </div>
 
-    <!-- ================= 第二部分：红色岁月·红旗漫卷 ================= -->
-    <div class="section-divider">
-        <i class="fas fa-flag-checkered"></i> 红旗漫卷 · 集体化年代
-        <span style="font-size: 0.8rem; margin-left: auto; background: #e6d3c8; padding: 0.2rem 0.7rem; border-radius: 20px;">1950 — 1999</span>
-    </div>
-    <div class="timeline-scroll">
-        <div class="timeline-track">
+            <!-- 卡片 5：童贞庄大队（1963） -->
             <div class="timeline-card">
-                <div class="card-year">1950s</div>
-                <div class="card-content">
-                    <div class="card-title">🗺️ 土地改革与农业合作化</div>
-                    <div class="card-desc">翻身分田，成立互助组。原三庄的村民第一次共同参与大型农田水利建设，红旗村的前身开始写入官方档案。</div>
-                    <div class="card-tag"><i class="fas fa-tractor"></i> 集体化开端</div>
-                </div>
+                <div class="card-img" style="background-image: url('https://picsum.photos/id/150/400/200');"></div>
+                <div class="card-year">1963</div>
+                <div class="card-title">🌾 三庄合一 · 童贞庄大队</div>
+                <div class="card-desc">大庄、西贤庄、童贞庄合并统一生产，兴修水利，水稻单产提升。</div>
+                <div class="card-tag"><i class="fas fa-handshake"></i> 集体化建制</div>
             </div>
-            <div class="timeline-card">
-                <div class="card-year">1963年</div>
-                <div class="card-content">
-                    <div class="card-title">🌾 三庄合一 · 童贞庄大队</div>
-                    <div class="card-desc">大庄、西贤庄、童贞庄三个农业生产大队合并，统称“童贞庄大队”。统一生产计划，兴修机耕路，水稻单产提升。</div>
-                    <div class="card-tag"><i class="fas fa-handshake"></i> 建制起源</div>
-                </div>
-            </div>
-            <div class="timeline-card">
-                <div class="card-year">1967年</div>
-                <div class="card-content">
-                    <div class="card-title">🔴 更名「红旗大队」</div>
-                    <div class="card-desc">特殊年代，童贞庄大队改名“红旗大队”，寓意革命精神与奋斗底色。名字自此扎根。</div>
-                    <div class="card-tag"><i class="fas fa-history"></i> 村名定鼎</div>
-                </div>
-            </div>
-            <div class="timeline-card">
-                <div class="card-year">1970s</div>
-                <div class="card-content">
-                    <div class="card-title">🏭 社队企业萌芽</div>
-                    <div class="card-desc">村集体创办水泥制件厂、红艺电镀厂，生产下水管道与灯具配件，成为白云区较早工业化的乡村之一。</div>
-                    <div class="card-tag"><i class="fas fa-industry"></i> 早期集体经济</div>
-                </div>
-            </div>
-            <div class="timeline-card">
-                <div class="card-year">1990年</div>
-                <div class="card-content">
-                    <div class="card-title">📜 红旗村民委员会成立</div>
-                    <div class="card-desc">根据行政改革，撤销红旗大队，设立“红旗村民委员会”，沿用至今。此时全村姓氏达20余个，李、陈、谢、吴为多。</div>
-                    <div class="card-tag"><i class="fas fa-balance-scale"></i> 现代治理</div>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <!-- ================= 第三部分：焕新之路·城乡交织 ================= -->
-    <div class="section-divider">
-        <i class="fas fa-city"></i> 焕新之路 · 城乡交织
-        <span style="font-size: 0.8rem; margin-left: auto; background: #e6d3c8; padding: 0.2rem 0.7rem; border-radius: 20px;">2000 — 至今 · 未来</span>
-    </div>
-    <div class="timeline-scroll">
-        <div class="timeline-track">
+            <!-- 卡片 6：红旗大队命名 -->
             <div class="timeline-card">
+                <div class="card-img" style="background-image: url('https://picsum.photos/id/160/400/200');"></div>
+                <div class="card-year">1967</div>
+                <div class="card-title">🔴 更名「红旗大队」</div>
+                <div class="card-desc">童贞庄大队改名“红旗大队”，象征奋斗精神，村名沿用至今。</div>
+                <div class="card-tag"><i class="fas fa-flag-checkered"></i> 命名定鼎</div>
+            </div>
+
+            <!-- 卡片 7：红旗村委会成立 -->
+            <div class="timeline-card">
+                <div class="card-img" style="background-image: url('https://picsum.photos/id/169/400/200');"></div>
+                <div class="card-year">1990</div>
+                <div class="card-title">📜 红旗村民委员会</div>
+                <div class="card-desc">撤销大队建制，设立村委会，20余姓氏融合治理。</div>
+                <div class="card-tag"><i class="fas fa-balance-scale"></i> 现代治理</div>
+            </div>
+
+            <!-- 卡片 8：物业经济与产业 -->
+            <div class="timeline-card">
+                <div class="card-img" style="background-image: url('https://picsum.photos/id/20/400/200');"></div>
                 <div class="card-year">2000s</div>
-                <div class="card-content">
-                    <div class="card-title">📦 物业出租 · 45家中小企业入驻</div>
-                    <div class="card-desc">依托近郊优势，村集体兴建厂房与仓库，45家轻工、包装、五金企业落地，集体经济年收入突破百万元。</div>
-                    <div class="card-tag"><i class="fas fa-chart-line"></i> 产业升级</div>
-                </div>
+                <div class="card-title">📦 物业出租 · 45家企业</div>
+                <div class="card-desc">依托近郊优势，村集体兴建厂房，45家轻工、包装企业落地，集体经济破百万。</div>
+                <div class="card-tag"><i class="fas fa-chart-line"></i> 产业升级</div>
             </div>
+
+            <!-- 卡片 9：留用地开发与更新 -->
             <div class="timeline-card">
-                <div class="card-year">2010s</div>
-                <div class="card-content">
-                    <div class="card-title">🌉 留用地开发 · 广龙路地块合作</div>
-                    <div class="card-desc">与钟落潭村、龙岗村联合开发广龙路留用地，引入商业与公共服务配套，激活土地价值。</div>
-                    <div class="card-tag"><i class="fas fa-drafting-compass"></i> 城市更新预备</div>
-                </div>
+                <div class="card-img" style="background-image: url('https://picsum.photos/id/26/400/200');"></div>
+                <div class="card-year">2010s-2025</div>
+                <div class="card-title">🏗️ 广龙路开发 · 旧改前期</div>
+                <div class="card-desc">与周边村联合开发留用地，纳入白云区城市更新摸底，人居环境提升。</div>
+                <div class="card-tag"><i class="fas fa-drafting-compass"></i> 城乡融合</div>
             </div>
+
+            <!-- 卡片 10：未来展望 -->
             <div class="timeline-card">
-                <div class="card-year">2020年</div>
-                <div class="card-content">
-                    <div class="card-title">📊 人口普查 · 3150人的多元社区</div>
-                    <div class="card-desc">外来人口与本土居民融合加深；村内依旧保存潮汕话、客家话等多语言生态。</div>
-                    <div class="card-tag"><i class="fas fa-users"></i> 人口结构</div>
-                </div>
-            </div>
-            <div class="timeline-card">
-                <div class="card-year">2023—2025</div>
-                <div class="card-content">
-                    <div class="card-title">🏗️ 城中村改造前期准备</div>
-                    <div class="card-desc">纳入白云区旧改计划摸底，与周边雄伟村、竹一村协同编制微改造方案，以“绣花功夫”提升人居环境。</div>
-                    <div class="card-tag"><i class="fas fa-hard-hat"></i> 焕新进行时</div>
-                </div>
-            </div>
-            <div class="timeline-card">
-                <div class="card-year">未来展望</div>
-                <div class="card-content">
-                    <div class="card-title">✨ 红旗文化记忆街区</div>
-                    <div class="card-desc">计划修复老祠堂与榕树广场，活化“潮汕方言展示馆”，打造广从近郊有温度的乡愁文化地标。</div>
-                    <div class="card-tag"><i class="far fa-lightbulb"></i> 乡村文艺复兴</div>
-                </div>
+                <div class="card-img" style="background-image: url('https://picsum.photos/id/29/400/200');"></div>
+                <div class="card-year">未来 · 愿景</div>
+                <div class="card-title">✨ 红旗文化记忆街区</div>
+                <div class="card-desc">修复老祠堂、榕树广场，打造“潮汕方言展示馆”，活化乡愁地标。</div>
+                <div class="card-tag"><i class="far fa-lightbulb"></i> 乡村文艺复兴</div>
             </div>
         </div>
     </div>
 
     <footer>
-        <i class="fas fa-map-pin"></i> 广州·白云钟落潭红旗村  &nbsp;|&nbsp;  基于地方志、村志与田野资料   &nbsp;|&nbsp;  时间轴持续更新
-        <div style="margin-top: 0.5rem; font-size: 0.7rem;"><i class="fas fa-code"></i> 以时间为桥 · 致敬每一个扎根土地的故事</div>
+        <i class="fas fa-map-marker-alt"></i> 广州 · 白云区钟落潭镇红旗村 &nbsp;|&nbsp; 图片占位符可替换为实拍 &nbsp;|&nbsp; 横向拖拽/滚动查看更多
     </footer>
 </div>
 
 <script>
-    // 简单的横向滚动优化：避免用户无意间误触 (可选)
-    const containers = document.querySelectorAll('.timeline-scroll');
-    containers.forEach(container => {
-        container.addEventListener('mousedown', (e) => {
-            if(e.target.closest('.timeline-card')) return;
-            let startX = e.pageX - container.offsetLeft;
-            let scrollLeft = container.scrollLeft;
-            const onMouseMove = (e) => {
-                const x = e.pageX - container.offsetLeft;
-                const walk = (x - startX) * 1.5;
-                container.scrollLeft = scrollLeft - walk;
-            };
-            const onMouseUp = () => {
-                document.removeEventListener('mousemove', onMouseMove);
-                document.removeEventListener('mouseup', onMouseUp);
-            };
-            document.addEventListener('mousemove', onMouseMove);
-            document.addEventListener('mouseup', onMouseUp);
-            e.preventDefault();
+    // 横向拖动优化
+    const scrollContainer = document.querySelector('.timeline-scroll');
+    if(scrollContainer) {
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+        scrollContainer.addEventListener('mousedown', (e) => {
+            isDown = true;
+            startX = e.pageX - scrollContainer.offsetLeft;
+            scrollLeft = scrollContainer.scrollLeft;
         });
-    });
+        window.addEventListener('mouseup', () => { isDown = false; });
+        window.addEventListener('mousemove', (e) => {
+            if(!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - scrollContainer.offsetLeft;
+            const walk = (x - startX) * 1.2;
+            scrollContainer.scrollLeft = scrollLeft - walk;
+        });
+    }
 </script>
 </body>
 </html>
