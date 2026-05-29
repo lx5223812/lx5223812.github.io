@@ -1,10 +1,13 @@
+以下是基于您提供的《红旗村一期更新策划》与《文化资源AI全流程解决方案》两份资料，构建的一个展示项目理念与AI赋能策略的品牌宣传网页。它融合了项目核心规划、四大维度目标、分期实施路径及重点更新节点，并清晰阐释了AI如何在文化资源整合、客群分析等环节提供支撑。
+```html
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>红旗村 · 百年纪事 | 广州白云</title>
-    <!-- Font Awesome 6 (免费图标库，本地 fallback) -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>横琴红旗村一期更新策划 | 琴澳SCAPES · AI全流程赋能</title>
+    <!-- Google Fonts & 简单图标库 -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         * {
@@ -14,310 +17,504 @@
         }
 
         body {
-            font-family: 'Segoe UI', 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
-            background: radial-gradient(circle at 10% 20%, #0a0c12, #030507);
-            color: #ededee;
-            overflow-x: hidden;
+            font-family: 'Inter', sans-serif;
+            background-color: #fefcf8;
+            color: #1e2a2e;
+            line-height: 1.5;
+            scroll-behavior: smooth;
         }
 
-        /* 主容器 */
-        .timeline-wrapper {
-            max-width: 1400px;
+        .container {
+            max-width: 1280px;
             margin: 0 auto;
-            padding: 3rem 2rem 5rem 2rem;
+            padding: 0 24px;
         }
 
-        /* 头部 */
-        .hero {
-            margin-bottom: 4rem;
-            border-left: 5px solid #e2583e;
-            padding-left: 1.8rem;
-        }
-        .hero h1 {
-            font-size: 3.8rem;
-            font-weight: 800;
-            letter-spacing: -0.02em;
-            background: linear-gradient(135deg, #fff, #e0b9a4);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-        .hero .sub {
-            font-size: 1.2rem;
-            color: #bfa690;
-            margin-top: 0.5rem;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1.5rem;
-        }
-        .stats {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1.2rem;
-            margin-top: 1.5rem;
-            font-size: 0.85rem;
-            color: #cbc3bc;
-        }
-        .stats i {
-            margin-right: 6px;
-            color: #e2583e;
-        }
-
-        /* 横向滚动区 */
-        .timeline-scroll {
-            overflow-x: auto;
-            overflow-y: visible;
-            padding: 2rem 0.5rem 3rem 0.5rem;
-            cursor: grab;
-            scrollbar-width: thin;
-            scrollbar-color: #e2583e #2a2a2a;
-        }
-        .timeline-scroll:active {
-            cursor: grabbing;
-        }
-        .timeline-track {
-            display: flex;
-            flex-direction: row;
-            gap: 2rem;
-            min-width: max-content;
-            padding: 0 1rem;
-        }
-
-        /* 卡片样式 —— 完全参考用户提供的“ULTIMATE”风格 */
-        .timeline-card {
-            width: 320px;
-            flex-shrink: 0;
-            background: rgba(20, 22, 27, 0.75);
+        /* 导航栏 */
+        .navbar {
+            position: sticky;
+            top: 0;
+            background: rgba(255, 252, 245, 0.96);
             backdrop-filter: blur(8px);
-            border-radius: 32px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
-            overflow: hidden;
-            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.5);
-        }
-        .timeline-card:hover {
-            transform: translateY(-8px);
-            border-color: #e2583e80;
-            box-shadow: 0 30px 40px -15px rgba(226, 88, 62, 0.2);
+            z-index: 100;
+            border-bottom: 1px solid #e9e2d4;
+            padding: 16px 0;
         }
 
-        /* 图片占位区域 —— 可以替换成真实照片 */
-        .card-img {
-            width: 100%;
-            height: 160px;
-            background-size: cover;
-            background-position: center;
-            background-color: #1e1f24;
-            position: relative;
-        }
-        /* 装饰叠加层 */
-        .card-img::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(0deg, #0a0c12 0%, transparent 60%);
+        .nav-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
         }
 
-        /* 年份（超大字体） */
-        .card-year {
-            font-size: 2.5rem;
-            font-weight: 800;
-            line-height: 1;
-            margin: 1rem 1.2rem 0.2rem 1.2rem;
+        .logo {
+            font-weight: 700;
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, #2b6e4f, #b98c46);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.3px;
+        }
+
+        .logo span {
+            font-size: 0.9rem;
+            background: none;
+            color: #7a5a3a;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 28px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            font-weight: 500;
+            color: #3a2c1f;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: #b47c2e;
+        }
+
+        /* 按钮 */
+        .btn-outline {
+            border: 1px solid #c0a16b;
+            background: transparent;
+            padding: 6px 18px;
+            border-radius: 40px;
+            font-weight: 500;
+            color: #5c401f;
+            transition: all 0.2s;
+        }
+
+        .btn-outline:hover {
+            background: #c0a16b20;
+        }
+
+        /* Hero */
+        .hero {
+            padding: 60px 0 40px;
+            background: linear-gradient(100deg, #fdf8ef 0%, #f3ede3 100%);
+            border-bottom: 1px solid #e5dbc9;
+        }
+
+        .hero-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .badge {
+            background: #e7dcc8;
+            color: #5b3e1a;
+            padding: 6px 14px;
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+            width: fit-content;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            line-height: 1.2;
             letter-spacing: -0.02em;
-            background: linear-gradient(120deg, #fff, #e7c7b6);
+            background: linear-gradient(135deg, #1f543e, #b77e2c);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
         }
-        .card-title {
-            font-size: 1.4rem;
-            font-weight: 600;
-            margin: 0.3rem 1.2rem 0.5rem 1.2rem;
-            color: #f3e9e2;
-        }
-        .card-desc {
-            font-size: 0.85rem;
-            color: #b9aea5;
-            margin: 0 1.2rem 1rem 1.2rem;
-            line-height: 1.45;
-        }
-        .card-tag {
-            margin: 0 1.2rem 1.2rem 1.2rem;
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #e2583e;
-            border-top: 1px dashed rgba(255,255,255,0.15);
-            padding-top: 0.7rem;
-            display: inline-block;
+
+        .hero-sub {
+            font-size: 1.2rem;
+            color: #4a3b28;
+            max-width: 700px;
         }
 
-        /* 响应式：手机变垂直，卡片宽度自动 */
-        @media (max-width: 750px) {
-            .timeline-wrapper {
-                padding: 1.5rem;
-            }
-            .hero h1 {
-                font-size: 2.2rem;
-            }
-            .timeline-scroll {
-                overflow-x: auto;
-            }
-            .timeline-card {
-                width: 280px;
-            }
+        .stats-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 32px;
+            margin: 32px 0 16px;
+            background: #fff9f0;
+            padding: 24px 28px;
+            border-radius: 48px;
+            border: 1px solid #eadbbc;
+        }
+
+        .stat-item {
+            flex: 1;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #2b6e4f;
+        }
+
+        /* 通用章节 */
+        section {
+            padding: 70px 0;
+            border-bottom: 1px solid #f0e7db;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            letter-spacing: -0.3px;
+            color: #1f3d32;
+        }
+
+        .section-sub {
+            color: #6b5a44;
+            max-width: 700px;
+            margin-bottom: 48px;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 32px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 32px;
+            padding: 28px 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.02);
+            border: 1px solid #efe2d0;
+            transition: all 0.25s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: #dbbc8c;
+            box-shadow: 0 20px 25px -12px rgba(0, 0, 0, 0.08);
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            color: #b77e2c;
+            margin-bottom: 20px;
+        }
+
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+        }
+
+        /* 双轴规划布局 */
+        .two-axis {
+            background: #fff7ed;
+            border-radius: 36px;
+            padding: 32px;
+            margin: 40px 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+            justify-content: center;
+        }
+
+        .axis-card {
+            flex: 1;
+            background: white;
+            border-radius: 24px;
+            padding: 24px;
+            border-left: 8px solid;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        }
+
+        .axis-1 { border-left-color: #3f8b6e; }
+        .axis-2 { border-left-color: #dc9e4a; }
+
+        /* timeline 简易 */
+        .timeline {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: space-between;
+            margin-top: 24px;
+        }
+        .phase {
+            flex: 1;
+            background: #ffffffcc;
+            backdrop-filter: blur(4px);
+            border-radius: 28px;
+            padding: 24px;
+            border: 1px solid #e5d5bf;
+        }
+        .phase h4 {
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+        .phase ul {
+            margin-top: 12px;
+            padding-left: 20px;
+        }
+
+        /* 节点展示网格 */
+        .node-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 28px;
+            margin-top: 20px;
+        }
+        .node-item {
+            background: #ffffffd9;
+            border-radius: 24px;
+            padding: 20px;
+            transition: all 0.2s;
+            border: 1px solid #eadbbc;
+        }
+        .node-img-placeholder {
+            height: 160px;
+            background: #f0e6d8;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            color: #946b2e;
+            font-size: 2rem;
+        }
+
+        /* AI 流程三阶段 */
+        .ai-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 36px;
+        }
+        .step {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            background: #ffffff;
+            border-radius: 32px;
+            padding: 28px;
+            border: 1px solid #e9dfcf;
+        }
+        .step-icon {
+            font-size: 2.5rem;
+            min-width: 70px;
+        }
+        .step-content {
+            flex: 1;
+        }
+        .tool-tag {
+            background: #eef3ef;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            display: inline-block;
+            margin-right: 8px;
+            margin-top: 8px;
         }
 
         footer {
+            background: #201e1a;
+            color: #cfc9bc;
+            padding: 40px 0;
             text-align: center;
-            margin-top: 3rem;
-            font-size: 0.75rem;
-            color: #6e6259;
-            border-top: 1px solid #1e1e1e;
-            padding-top: 2rem;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 760px) {
+            h1 { font-size: 2.2rem; }
+            .section-title { font-size: 1.8rem; }
+            .navbar .nav-flex { flex-direction: column; }
+            .stats-row { flex-direction: column; text-align: center; }
+            .phase { margin-bottom: 16px; }
         }
     </style>
 </head>
 <body>
-<div class="timeline-wrapper">
+    <div class="navbar">
+        <div class="container nav-flex">
+            <div class="logo">红旗村·一期更新 <span>| 琴澳SCAPES</span></div>
+            <div class="nav-links">
+                <a href="#vision">愿景</a>
+                <a href="#dimensions">四大维度</a>
+                <a href="#planning">规划结构</a>
+                <a href="#nodes">核心节点</a>
+                <a href="#ai-solution">AI全流程赋能</a>
+                <a href="#phasing">分期实施</a>
+            </div>
+            <div><a href="#" class="btn-outline">AI 驱动更新</a></div>
+        </div>
+    </div>
+
     <div class="hero">
-        <h1>🌾 红旗村 · 纪事</h1>
-        <div class="sub">
-            <span>📍 白云区钟落潭镇</span>
-            <span>📅 清初 — 未来</span>
-            <span>🗣️ 揭阳方言岛</span>
-        </div>
-        <div class="stats">
-            <div><i class="fas fa-people-arrows"></i> 3150人 (2020)</div>
-            <div><i class="fas fa-landmark"></i> 12个生产社 · 20+姓氏</div>
-            <div><i class="fas fa-language"></i> 潮汕方言保留200年</div>
-            <div><i class="fas fa-charging-station"></i> 45家企业入驻</div>
+        <div class="container hero-grid">
+            <div class="badge"><i class="fas fa-leaf"></i> 琴澳同源 · 共生焕新</div>
+            <h1>蚝运连连 · 榕享未来<br>从被动承接到主动创造</h1>
+            <div class="hero-sub">琴澳 SCAPES —— 小锚点撬动大融合、大图景。打造大湾区独一无二的“琴澳同源”文化微度假目的地。</div>
+            <div class="stats-row">
+                <div class="stat-item"><div class="stat-number">+80%</div><div>文化梳理效率提升</div></div>
+                <div class="stat-item"><div class="stat-number">-70%</div><div>同质化风险降低</div></div>
+                <div class="stat-item"><div class="stat-number">双轴+AI</div><div>叙事精准落地</div></div>
+                <div class="stat-item"><div class="stat-number">3+1</div><div>服务中心·社群聚落</div></div>
+            </div>
         </div>
     </div>
 
-    <!-- 横向时间轴轨道 -->
-    <div class="timeline-scroll">
-        <div class="timeline-track">
+    <section id="vision">
+        <div class="container">
+            <div class="section-title">琴澳共融 门户焦点</div>
+            <div class="section-sub">从区域洼地走向门户焦点，构建产业、文化、形象、综合四大维度的跃升，以“蚝文化+同源记忆”激活村落生命力。</div>
+            <div class="cards-grid">
+                <div class="card"><div class="card-icon"><i class="fas fa-chart-line"></i></div><h3>产业·爆点项目</h3><p>山海运动、康养休闲、文化创意、旅游服务四大产业板块，构建创新发展动能。</p></div>
+                <div class="card"><div class="card-icon"><i class="fas fa-palette"></i></div><h3>文化·艺术生活舞台</h3><p>琴澳“同源-共融-共生”活态文化体验，打造文化IP与艺术生活秀场。</p></div>
+                <div class="card"><div class="card-icon"><i class="fas fa-city"></i></div><h3>形象·门户地标</h3><p>内外共生，树立琴澳相连门户形象地标，村落风貌与时尚界面交融。</p></div>
+                <div class="card"><div class="card-icon"><i class="fas fa-handshake"></i></div><h3>综合·共创更新标杆</h3><p>琴澳社区共创更新标杆，多元人群兼顾生活与旅游配套支撑。</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 规划结构 双轴 -->
+    <section style="background: #fdf9f2;">
+        <div class="container" id="planning">
+            <div class="section-title">规划结构 · 两轴串联</div>
+            <div class="section-sub">琴澳共生走廊 & 蚝文化体验长廊 | 外枢纽内村落，琴澳共享社群聚落</div>
+            <div class="two-axis">
+                <div class="axis-card axis-1"><i class="fas fa-road" style="font-size: 1.8rem; color:#3f8b6e;"></i><h3 style="margin-top: 12px;">琴澳共生走廊</h3><p>精神溯源之轴，串联人文历史枢纽与山海资源，链接梦中心与海上运旅资源，构建琴澳记忆共鸣。</p></div>
+                <div class="axis-card axis-2"><i class="fas fa-utensils" style="font-size: 1.8rem; color:#dc9e4a;"></i><h3 style="margin-top: 12px;">蚝文化体验长廊</h3><p>烟火生活之轴，浓缩“蚝”非遗文化、美食街巷，营造烟火气与精致感共存的街区体验。</p></div>
+            </div>
+            <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: space-between; margin-top: 16px;">
+                <div style="flex:1; background: #fff; border-radius: 28px; padding: 20px;"><i class="fas fa-anchor"></i> <strong>外枢纽</strong> — 琴澳融合时尚秀场（码头枢纽+滨水商业）</div>
+                <div style="flex:1; background: #fff; border-radius: 28px; padding: 20px;"><i class="fas fa-tree"></i> <strong>内村落</strong> — 生活基因+创意精致气息，蚝创艺术村落</div>
+                <div style="flex:1; background: #fff; border-radius: 28px; padding: 20px;"><i class="fas fa-users"></i> <strong>琴澳共享聚落</strong> — 两岸青年共创，3+1服务中心赋能</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 核心更新节点 -->
+    <section id="nodes">
+        <div class="container">
+            <div class="section-title">重点更新场景 · 沉浸式体验升级</div>
+            <div class="section-sub">从相思瀑布到蚝味街区，打造“可沉浸、可消费、可共生”的文化秀场</div>
+            <div class="node-grid">
+                <div class="node-item"><div class="node-img-placeholder"><i class="fas fa-water fa-3x"></i></div><h3>相思瀑布更新</h3><p>水泵保障四季水量，光影秀+崖壁文化呈现，仙女赠琴传说沉浸式复现，琴澳同源水景剧场。</p></div>
+                <div class="node-item"><div class="node-img-placeholder"><i class="fas fa-stairs fa-3x"></i></div><h3>彩虹楼梯 · 仙女飘带滑梯</h3><p>全龄友好网红地标，增设自动扶梯、滑梯及无障碍通行，从功能性楼梯跃升为城市微地标。</p></div>
+                <div class="node-item"><div class="node-img-placeholder"><i class="fas fa-music fa-3x"></i></div><h3>赠琴文化广场</h3><p>水幕剧场、户外仙琴剧场，地下停车+地面故事互动，打造琴澳文化展演舞台。</p></div>
+                <div class="node-item"><div class="node-img-placeholder"><i class="fas fa-building fa-3x"></i></div><h3>政府物业活化</h3><p>管委会大楼变身“蚝文化展示中心+文创酒店+游客服务中心”，激活闲置资源。</p></div>
+                <div class="node-item"><div class="node-img-placeholder"><i class="fas fa-paintbrush-fine fa-3x"></i></div><h3>蚝创艺术村落</h3><p>旧村更新为“蚝创艺术村落”，街巷肌理新生 + 艺术赋能，打造主客共享创意社区。</p></div>
+                <div class="node-item"><div class="node-img-placeholder"><i class="fas fa-fish fa-3x"></i></div><h3>“蚝有味”美食文化街</h3><p>宝中路·银河街断面优化，岭南南洋风+葡澳风情，规范店招，激活日咖夜酒精致外摆。</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI 全流程解决方案专区 -->
+    <section id="ai-solution" style="background: #f4efe6;">
+        <div class="container">
+            <div class="section-title"><i class="fas fa-microchip"></i> 文化资源AI全流程赋能 · 红旗村专属智策引擎</div>
+            <div class="section-sub">从资源采集到叙事落地，10+AI工具组合实现效率跃升，破解文化“散、乱、弱”，构建差异化竞争力</div>
             
-            <!-- 卡片 1：潮汕先民迁入 -->
-            <div class="timeline-card">
-                <div class="card-img" style="background-image: url('https://picsum.photos/id/104/400/200');"></div>
-                <div class="card-year">1796-1820</div>
-                <div class="card-title">🌱 潮汕先民北上</div>
-                <div class="card-desc">揭阳谢、吴两姓先祖落脚广州北郊，两百年繁衍超800人，形成广州罕见的潮汕方言岛。</div>
-                <div class="card-tag"><i class="fas fa-language"></i> 方言孤岛 · 迁徙史诗</div>
+            <div class="ai-steps">
+                <div class="step">
+                    <div class="step-icon"><i class="fas fa-database"></i></div>
+                    <div class="step-content">
+                        <h3>阶段一 · AI文化资源自动采集与整合</h3>
+                        <p>运用GPT-4 Turbo+WebPilot 抓取横琴蚝文化、仙女赠琴传说、葡文碑刻、非遗资料，构建琴澳同源知识图谱，替代80%人工整理时间，精准提炼“双轴”文化主线。</p>
+                        <div><span class="tool-tag">GPT-4 Turbo</span><span class="tool-tag">WebPilot</span><span class="tool-tag">知识图谱构建</span></div>
+                        <div class="stat-number" style="font-size: 1.2rem;">✓ 产出：琴澳文化资源库 + 时间/空间/类型三维脉络</div>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-icon"><i class="fas fa-chart-pie"></i></div>
+                    <div class="step-content">
+                        <h3>阶段二 · AI同质化破局 + 竞合分析 + 客群画像</h3>
+                        <p>DeepSeek+MarketMuse 对比珠澳文旅项目，量化红旗村差异化优势（“蚝”文化唯一性）。结合聚类算法精准划分客群（微度假家庭、文化深度客、跨境创客），指导业态策划与“琴澳未来梦中心”枢纽定位。</p>
+                        <div><span class="tool-tag">DeepSeek</span><span class="tool-tag">IBM Watson趋势预测</span><span class="tool-tag">Diffbot案例聚类</span></div>
+                        <div>🎯 输出：同质化风险报告 & “蚝创艺术村落”差异化IP策略 & 联票游线辐射大湾</div>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-icon"><i class="fas fa-pen-fancy"></i></div>
+                    <div class="step-content">
+                        <h3>阶段三 · AI叙事落地 & 双轴规划生成</h3>
+                        <p>Midjourney+ControlNet将蚝壳纹样、岭南窗花转化为现代设计语言；StoryRibbons+GPT-4自动生成“琴澳共生走廊+蚝文化长廊”双轴规划图，构建从“相思瀑布→旧村→码头”的完整故事线，实现文化IP的可视化落地。</p>
+                        <div><span class="tool-tag">Midjourney</span><span class="tool-tag">Runway Gen-3</span><span class="tool-tag">StoryRibbons AI</span></div>
+                        <div>🌟 成果：文化设计手册 + 沉浸式漫游动画 + 全周期实施清单</div>
+                    </div>
+                </div>
             </div>
-
-            <!-- 卡片 2：宗祠与三庄雏形 -->
-            <div class="timeline-card">
-                <div class="card-img" style="background-image: url('https://picsum.photos/id/126/400/200');"></div>
-                <div class="card-year">清中晚期</div>
-                <div class="card-title">🏛️ 宗祠立基 · 三庄成形</div>
-                <div class="card-desc">大庄、西贤庄、童贞庄雏形初现，共建祠堂、风水塘，奠定岭南耕读传家格局。</div>
-                <div class="card-tag"><i class="fas fa-tree"></i> 宗族礼俗 · 聚落根基</div>
-            </div>
-
-            <!-- 卡片 3：竹料墟市与农耕 -->
-            <div class="timeline-card">
-                <div class="card-img" style="background-image: url('https://picsum.photos/id/130/400/200');"></div>
-                <div class="card-year">晚清-民国</div>
-                <div class="card-title">🚜 墟市经济 · 田园基业</div>
-                <div class="card-desc">依托竹料墟商贸，盛产水稻、甘蔗、蔬果，肩挑竹器供应周边三镇。</div>
-                <div class="card-tag"><i class="fas fa-store"></i> 传统农商 · 墟市纽带</div>
-            </div>
-
-            <!-- 卡片 4：抗战后方 -->
-            <div class="timeline-card">
-                <div class="card-img" style="background-image: url('https://picsum.photos/id/135/400/200');"></div>
-                <div class="card-year">1940s</div>
-                <div class="card-title">⚔️ 烽火后方 · 红色星火</div>
-                <div class="card-desc">东江纵队游击队秘密物资转运点，村庄成为敌后隐蔽支撑。</div>
-                <div class="card-tag"><i class="fas fa-star-of-life"></i> 红色血脉</div>
-            </div>
-
-            <!-- 卡片 5：童贞庄大队（1963） -->
-            <div class="timeline-card">
-                <div class="card-img" style="background-image: url('https://picsum.photos/id/150/400/200');"></div>
-                <div class="card-year">1963</div>
-                <div class="card-title">🌾 三庄合一 · 童贞庄大队</div>
-                <div class="card-desc">大庄、西贤庄、童贞庄合并统一生产，兴修水利，水稻单产提升。</div>
-                <div class="card-tag"><i class="fas fa-handshake"></i> 集体化建制</div>
-            </div>
-
-            <!-- 卡片 6：红旗大队命名 -->
-            <div class="timeline-card">
-                <div class="card-img" style="background-image: url('https://picsum.photos/id/160/400/200');"></div>
-                <div class="card-year">1967</div>
-                <div class="card-title">🔴 更名「红旗大队」</div>
-                <div class="card-desc">童贞庄大队改名“红旗大队”，象征奋斗精神，村名沿用至今。</div>
-                <div class="card-tag"><i class="fas fa-flag-checkered"></i> 命名定鼎</div>
-            </div>
-
-            <!-- 卡片 7：红旗村委会成立 -->
-            <div class="timeline-card">
-                <div class="card-img" style="background-image: url('https://picsum.photos/id/169/400/200');"></div>
-                <div class="card-year">1990</div>
-                <div class="card-title">📜 红旗村民委员会</div>
-                <div class="card-desc">撤销大队建制，设立村委会，20余姓氏融合治理。</div>
-                <div class="card-tag"><i class="fas fa-balance-scale"></i> 现代治理</div>
-            </div>
-
-            <!-- 卡片 8：物业经济与产业 -->
-            <div class="timeline-card">
-                <div class="card-img" style="background-image: url('https://picsum.photos/id/20/400/200');"></div>
-                <div class="card-year">2000s</div>
-                <div class="card-title">📦 物业出租 · 45家企业</div>
-                <div class="card-desc">依托近郊优势，村集体兴建厂房，45家轻工、包装企业落地，集体经济破百万。</div>
-                <div class="card-tag"><i class="fas fa-chart-line"></i> 产业升级</div>
-            </div>
-
-            <!-- 卡片 9：留用地开发与更新 -->
-            <div class="timeline-card">
-                <div class="card-img" style="background-image: url('https://picsum.photos/id/26/400/200');"></div>
-                <div class="card-year">2010s-2025</div>
-                <div class="card-title">🏗️ 广龙路开发 · 旧改前期</div>
-                <div class="card-desc">与周边村联合开发留用地，纳入白云区城市更新摸底，人居环境提升。</div>
-                <div class="card-tag"><i class="fas fa-drafting-compass"></i> 城乡融合</div>
-            </div>
-
-            <!-- 卡片 10：未来展望 -->
-            <div class="timeline-card">
-                <div class="card-img" style="background-image: url('https://picsum.photos/id/29/400/200');"></div>
-                <div class="card-year">未来 · 愿景</div>
-                <div class="card-title">✨ 红旗文化记忆街区</div>
-                <div class="card-desc">修复老祠堂、榕树广场，打造“潮汕方言展示馆”，活化乡愁地标。</div>
-                <div class="card-tag"><i class="far fa-lightbulb"></i> 乡村文艺复兴</div>
+            <div style="background: #2b6e4f10; border-radius: 28px; padding: 20px; margin-top: 32px; text-align: center;">
+                <i class="fas fa-chart-simple"></i> <strong>工具组合推荐</strong> · 中型/大型项目适配：GPT-4 + Claude 3 + Midjourney + 定制API，周期3-7天，效率提升80%，叙事精准度提高2倍。
             </div>
         </div>
-    </div>
+    </section>
+
+    <!-- 分期实施建议 -->
+    <section id="phasing">
+        <div class="container">
+            <div class="section-title">分期实施 · 可持续发展路径</div>
+            <div class="section-sub">发挥规建投运一体化优势，分三步落地“形象建立—功能成熟—服务衍生”</div>
+            <div class="timeline">
+                <div class="phase"><h4>📌 近期实施 <span style="font-size:0.9rem;">形象建立期</span></h4>
+                    <ul><li>仙女赠琴广场 & 琴澳共享聚落</li><li>村落风貌+基础设施提升</li><li>蚝文化美食街示范段</li><li>开发合作机制&实施清单</li></ul>
+                </div>
+                <div class="phase"><h4>⚙️ 中期拓展 <span style="font-size:0.9rem;">功能成熟期</span></h4>
+                    <ul><li>码头枢纽站+地下空间一体化</li><li>琴澳共生走廊+下穿隧道</li><li>“吃住行游购娱”全要素闭环</li><li>滨水商业街+慢行网络</li></ul>
+                </div>
+                <div class="phase"><h4>🌿 远期规划 <span style="font-size:0.9rem;">服务衍生期</span></h4>
+                    <ul><li>康养服务基地+运动公园</li><li>琴澳共创孵化园（文创/户外人才）</li><li>山海漫游网络通山达海</li><li>智力支撑与衍生经济生态</li></ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 街区更新亮点 + 交通优化 -->
+    <section style="background: #ffffff;">
+        <div class="container">
+            <div class="section-title">一街一主题 · 精致烟火美学街区</div>
+            <div class="section-sub">宝中路“蚝有味”美食街、银河街“日咖夜酒”葡萄天地、德政路山海文化景观街、宝兴路中西葡韵形象街</div>
+            <div class="node-grid" style="margin-bottom: 28px;">
+                <div class="node-item"><i class="fas fa-egg" style="font-size: 2rem;"></i><h4>蚝文化美食街</h4><p>统一浅色基底+岭南/南洋风店招，增设外摆区，优化步行断面，解决机非混行，打造夜间经济消费闭环。</p></div>
+                <div class="node-item"><i class="fas fa-wine-glass-alt"></i><h4>银河街 · 葡萄天地</h4><p>延续澳门经典色系，激活骑楼消极空间，限制车行，日咖夜酒精致外摆，欧式浪漫微醺场景。</p></div>
+                <div class="node-item"><i class="fas fa-mountain-sun"></i><h4>德政路山海景观街</h4><p>植入琴澳山海元素，店前景观一体化，街边潜力空间激活，构筑视线通廊。</p></div>
+                <div class="node-item"><i class="fas fa-landmark"></i><h4>宝兴路形象主街</h4><p>借鉴澳门色彩风貌，统一招牌橱窗，打造琴澳融合形象橱窗。</p></div>
+            </div>
+            <div style="display: flex; flex-wrap: wrap; gap: 24px; background: #f5eee4; border-radius: 36px; padding: 24px; justify-content: space-between;">
+                <div><i class="fas fa-truck-fast"></i> <strong>消防通道优化</strong><br>区域-片区-应急三级体系，新增西侧消防通道，保障安全底线。</div>
+                <div><i class="fas fa-parking"></i> <strong>停车设施布局</strong><br>地下停车+外围停车换乘，缓解拥堵，提升慢行体验。</div>
+                <div><i class="fas fa-bicycle"></i> <strong>全域慢行网络</strong><br>链接山海、村落与码头，打造品质漫游村网络。</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI精准落地效果与数据佐证 -->
+    <section style="background: #e9e2d4;">
+        <div class="container">
+            <div class="section-title">AI赋能红旗村 · 数据驱动价值</div>
+            <div class="cards-grid">
+                <div class="card"><i class="fas fa-brain card-icon"></i><h3>文化资源梳理效率</h3><p>GPT自动提炼“蚝民俗+非遗古琴+码头故事”，建立知识图谱耗时由3周缩短至2天。</p></div>
+                <div class="card"><i class="fas fa-chart-line card-icon"></i><h3>差异化定位突围</h3><p>竞合模型指出周边项目“红色/海洋文化”饱和，确立“蚝+琴澳同源”唯一性，降低同质化风险70%</p></div>
+                <div class="card"><i class="fas fa-map-marked-alt card-icon"></i><h3>双轴规划精准落地</h3><p>AI生成“精神溯源之轴+烟火生活之轴”空间-时间矩阵，节点故事线一键可视化，政府物业改造优先级智能排序。</p></div>
+                <div class="card"><i class="fas fa-users-viewfinder card-icon"></i><h3>客群业态精准匹配</h3><p>小红书/OTA评论聚类，预测Z世代与家庭客占63%，推导出夜间演艺+蚝主题研学+跨境文创零售业态。</p></div>
+            </div>
+            <div style="margin-top: 40px; text-align: center; background: #fff; border-radius: 100px; padding: 16px; border: 1px solid #cfbc9a;">
+                ⚡ 中建一体化优势 + AI决策支持 —— 从策划到运营，构建可持续的红旗村“琴澳复合型文旅休闲港湾”
+            </div>
+        </div>
+    </section>
 
     <footer>
-        <i class="fas fa-map-marker-alt"></i> 广州 · 白云区钟落潭镇红旗村 &nbsp;|&nbsp; 图片占位符可替换为实拍 &nbsp;|&nbsp; 横向拖拽/滚动查看更多
+        <div class="container">
+            <div><i class="fas fa-anchor"></i> 横琴·红旗村一期更新策划 | 琴澳SCAPES · 蚝运连连 榕享未来</div>
+            <div style="margin-top: 12px;">产业 · 文化 · 形象 · 综合 四维跃升 | 双轴串联 外港内村 琴澳共享 | AI全流程解决方案助力文化叙事精准落地</div>
+            <div style="margin-top: 24px; font-size: 0.75rem;">© 2026 红旗村更新项目组 · 策划效果与AI技术融合示范</div>
+        </div>
     </footer>
-</div>
-
-<script>
-    // 横向拖动优化
-    const scrollContainer = document.querySelector('.timeline-scroll');
-    if(scrollContainer) {
-        let isDown = false;
-        let startX;
-        let scrollLeft;
-        scrollContainer.addEventListener('mousedown', (e) => {
-            isDown = true;
-            startX = e.pageX - scrollContainer.offsetLeft;
-            scrollLeft = scrollContainer.scrollLeft;
-        });
-        window.addEventListener('mouseup', () => { isDown = false; });
-        window.addEventListener('mousemove', (e) => {
-            if(!isDown) return;
-            e.preventDefault();
-            const x = e.pageX - scrollContainer.offsetLeft;
-            const walk = (x - startX) * 1.2;
-            scrollContainer.scrollLeft = scrollLeft - walk;
-        });
-    }
-</script>
 </body>
 </html>
+```
