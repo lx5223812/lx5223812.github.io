@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>莱山文旅云 · 南拓项目整合与盈利引流诊断</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        .edit-number, .edit-text, [contenteditable="true"] { cursor: pointer; transition: 0.1s; display: inline-block; }
+        .edit-number:hover, .edit-text:hover, [contenteditable="true"]:hover { background-color: #e2e8f0; border-radius: 6px; padding: 0 4px; }
+        .card-hover { transition: transform 0.2s, box-shadow 0.2s; }
+        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -12px rgba(0,0,0,0.1); }
+        .nav-active { background-color: #2563eb !important; color: white !important; }
+        .modal { transition: opacity 0.2s ease; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #c1c1c1; border-radius: 10px; }
+        @media print {
+            .no-print, .sidebar, button, .edit-number, [contenteditable] { display: none !important; }
+            .main-content { margin: 0 !important; padding: 0 !important; width: 100% !important; }
+            .bg-white { box-shadow: none !important; border: 1px solid #ccc; page-break-inside: avoid; }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans flex h-screen overflow-hidden">
+
+<!-- 左侧主导航 -->
+<div class="sidebar w-72 bg-white shadow-xl flex flex-col h-full overflow-y-auto z-10">
+    <div class="p-5 border-b bg-gradient-to-r from-blue-600 to-blue-800 text-white">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-xl font-bold">莱</div>
+            <div>
+                <h1 class="text-xl font-bold tracking-wide">莱山文旅云</h1>
+                <p class="text-xs opacity-80">智慧文旅 · 南拓项目整合</p>
+            </div>
+        </div>
+    </div>
+    <div class="flex-1 py-4 px-3 space-y-1">
+        <div data-category="resource" class="category-nav px-4 py-3 rounded-xl flex items-center gap-3 text-gray-700 hover:bg-blue-50 cursor-pointer transition nav-active">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+            <span>文旅资源</span>
+        </div>
+        <div data-category="integration" class="category-nav px-4 py-3 rounded-xl flex items-center gap-3 text-gray-700 hover:bg-blue-50 cursor-pointer transition">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+            <span>南拓项目整合</span>
+        </div>
+        <div data-category="analysis" class="category-nav px-4 py-3 rounded-xl flex items-center gap-3 text-gray-700 hover:bg-blue-50 cursor-pointer transition">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <span>痛点·盈利分析</span>
+        </div>
+    </div>
+    <div class="p-3 text-xs text-gray-400 border-t text-center no-print">数据实时可编辑 · 点击修改</div>
+</div>
+
+<!-- 右侧主内容区 -->
+<div class="main-content flex-1 overflow-y-auto p-6 bg-gray-50">
+    <div class="flex justify-between items-center mb-4 no-print">
+        <div class="text-sm text-gray-500">莱山区 · 南拓项目整合与盈利引流诊断报告</div>
+        <div class="flex gap-2">
+            <button id="exportJsonBtn" class="bg-white text-gray-700 border rounded-full px-3 py-1 text-sm shadow hover:bg-gray-100">📋 导出数据(JSON)</button>
+            <button id="exportPdfBtn" class="bg-white text-gray-700 border rounded-full px-3 py-1 text-sm shadow hover:bg-gray-100">📥 下载PDF报告</button>
+        </div>
+    </div>
+    <div id="dynamicContent" class="space-y-6">
+        <!-- 默认显示文旅资源页面 -->
+    </div>
+</div>
+
+<!-- 全局模态框 -->
+<div id="detailModal" class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden transition-opacity">
+    <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto p-6 shadow-2xl">
+        <div class="flex justify-between items-center mb-3"><h3 id="modalTitle" class="text-xl font-bold">项目详情</h3><button id="closeModalBtn" class="text-2xl text-gray-400 hover:text-gray-600">&times;</button></div>
+        <div id="modalContent" class="text-gray-600 space-y-2"></div>
+        <div class="mt-4 flex justify-end"><button id="closeModalFooter" class="bg-gray-200 px-4 py-1 rounded-full text-sm">关闭</button></div>
+    </div>
+</div>
+
+<script>
+    // ======================= 34个点位基础数据（南拓核心项目群） =======================
+    const resources = [
+        { id:1, name:"尚书家风馆", area:"解甲庄街道", type:"文化家风", heat:88, desc:"以清朝工部尚书李永绍家风为依托，展示耕读传家文化，党员干部廉洁教育基地。", category:"旅游景点", subcat:"特色文化", season:null, icon:"🏛️", img:"https://picsum.photos/id/29/400/300" },
+        { id:2, name:"古生陶社", area:"解甲庄街道", type:"非遗手作", heat:82, desc:"拉坯泥塑体验、陶瓷文化宣讲，青少年非遗体验好去处。", category:"旅游景点", subcat:"非遗体验", season:null, icon:"🏺", img:"https://picsum.photos/id/134/400/300" },
+        { id:3, name:"慕茗文创", area:"解甲庄街道", type:"咖啡/茶/文创", heat:90, desc:"土鸡窑烤、非遗手作（剪纸/竹编/扎染），乡土治愈小院。", category:"餐饮美食", subcat:"特色餐饮", season:null, icon:"🍵", img:"https://picsum.photos/id/127/400/300" },
+        { id:4, name:"春野花青果蔬研习社", area:"解甲庄街道", type:"现代农业", heat:85, desc:"农文旅融合，果蔬创意手作，研学活动超百次。", category:"旅游景点", subcat:"研学体验", season:"四季", icon:"🥬", img:"https://picsum.photos/id/156/400/300" },
+        { id:5, name:"山野里咖啡", area:"解甲庄街道", type:"咖啡/茶/文创", heat:89, desc:"复古胶片相机主题咖啡，康普茶，摄影交流空间。", category:"餐饮美食", subcat:"咖啡厅", season:null, icon:"☕", img:"https://picsum.photos/id/107/400/300" },
+        { id:6, name:"万禾花卉合作社", area:"解甲庄街道", type:"现代农业", heat:72, desc:"联村共建花卉市场，占地15000㎡，赏花胜地。", category:"旅游景点", subcat:"农业观光", season:"春季", icon:"🌸", img:"https://picsum.photos/id/29/400/300" },
+        { id:7, name:"合享智谷AI大数据中心", area:"解甲庄街道", type:"工业遗存", heat:65, desc:"AI产业大数据中心，产业数字化智能平台。", category:"旅游景点", subcat:"工业旅游", season:null, icon:"🤖", img:"https://picsum.photos/id/107/400/300" },
+        { id:8, name:"长荣文创园", area:"解甲庄街道", type:"工业遗存", heat:94, desc:"水泥厂改造，工业遗存+运动艺术综合体，泵道世锦赛场地。", category:"旅游景点", subcat:"工业旅游", season:null, icon:"🏭", img:"https://picsum.photos/id/96/400/300" },
+        { id:9, name:"素喜禾院", area:"解甲庄街道", type:"民宿/餐饮", heat:86, desc:"教育研学、手工工坊、药食同源餐饮，跨村联动电商平台。", category:"饭店民宿", subcat:"精品民宿", season:null, icon:"🏡", img:"https://picsum.photos/id/37/400/300" },
+        { id:10, name:"朱柳漫画村", area:"解甲庄街道", type:"文化家风", heat:96, desc:"露天美术馆，百余幅漫画作品，网红打卡地。", category:"旅游景点", subcat:"特色文化", season:null, icon:"🎨", img:"https://picsum.photos/id/20/400/300" },
+        { id:11, name:"那风·The Wind星空露营", area:"解甲庄街道", type:"露营/户外", heat:93, desc:"群山环绕，拎包露营，自助烧烤，篝火晚会。", category:"旅游景点", subcat:"露营体验", season:"春夏秋", icon:"🏕️", img:"https://picsum.photos/id/30/400/300" },
+        { id:12, name:"桃源农业专业合作社", area:"解甲庄街道", type:"现代农业", heat:78, desc:"大樱桃种植，水肥一体化大棚，村企联营。", category:"旅游景点", subcat:"农业采摘", season:"采摘5-6月", icon:"🍒", img:"https://picsum.photos/id/104/400/300" },
+        { id:13, name:"溪谷露营", area:"解甲庄街道", type:"露营/户外", heat:84, desc:"露营+研学+滑索，规划夜场灯光秀。", category:"旅游景点", subcat:"露营体验", season:"春夏秋", icon:"⛺", img:"https://picsum.photos/id/238/400/300" },
+        { id:14, name:"山农酥梨产业基地", area:"解甲庄街道", type:"现代农业", heat:81, desc:"山农酥梨新品种，生态种植，盛果期。", category:"旅游景点", subcat:"农业采摘", season:"采摘9月", icon:"🍐", img:"https://picsum.photos/id/90/400/300" },
+        { id:15, name:"柏松家庭农场", area:"解甲庄街道", type:"现代农业", heat:76, desc:"围子山原生本草保育，蓝莓盆栽，研学。", category:"旅游景点", subcat:"农业采摘", season:"采摘6-7月", icon:"🫐", img:"https://picsum.photos/id/182/400/300" },
+        { id:16, name:"优和谷农业科技", area:"解甲庄街道", type:"现代农业", heat:74, desc:"西红柿育苗，羊肚菌种植，34个大棚。", category:"旅游景点", subcat:"农业观光", season:"四季", icon:"🍅", img:"https://picsum.photos/id/108/400/300" },
+        { id:17, name:"云谷农场", area:"解甲庄街道", type:"现代农业", heat:88, desc:"食用葡萄基地，研学旅行，蓝宝石葡萄。", category:"旅游景点", subcat:"农业采摘", season:"采摘8-10月", icon:"🍇", img:"https://picsum.photos/id/128/400/300" },
+        { id:18, name:"现代果业阳光秀草莓基地", area:"院格庄街道", type:"现代农业", heat:91, desc:"智慧草莓产业园，脱毒种苗，研学观光。", category:"旅游景点", subcat:"农业采摘", season:"采摘12月-5月", icon:"🍓", img:"https://picsum.photos/id/190/400/300" },
+        { id:19, name:"现代果业苹果谷", area:"院格庄街道", type:"现代农业", heat:89, desc:"苹果种质资源圃，新品种展示，研学基地。", category:"旅游景点", subcat:"农业采摘", season:"采摘9-10月", icon:"🍎", img:"https://picsum.photos/id/114/400/300" },
+        { id:20, name:"永智农场", area:"院格庄街道", type:"咖啡/茶/文创", heat:95, desc:"梨园+咖啡+甜点，网红近郊休闲场所。", category:"餐饮美食", subcat:"咖啡厅", season:null, icon:"🍐☕", img:"https://picsum.photos/id/73/400/300" },
+        { id:21, name:"枫叶谷餐厅", area:"院格庄街道", type:"民宿/餐饮", heat:80, desc:"土炉瓦罐炖鸡，农家风味。", category:"餐饮美食", subcat:"农家乐", season:null, icon:"🍲", img:"https://picsum.photos/id/127/400/300" },
+        { id:22, name:"于家汤村圣莓有机蓝莓基地", area:"院格庄街道", type:"现代农业", heat:77, desc:"有机蓝莓种植，带动就业。", category:"旅游景点", subcat:"农业采摘", season:"采摘6-7月", icon:"🫐", img:"https://picsum.photos/id/182/400/300" },
+        { id:23, name:"夹河村共富生态农业基地", area:"院格庄街道", type:"现代农业", heat:73, desc:"樱桃大棚，共富公司模式。", category:"旅游景点", subcat:"农业采摘", season:"采摘5-6月", icon:"🍒", img:"https://picsum.photos/id/104/400/300" },
+        { id:24, name:"竹梦村", area:"院格庄街道", type:"非遗手作", heat:90, desc:"乡村共创社区，手作坊，谷稻天天农场。", category:"旅游景点", subcat:"非遗体验", season:null, icon:"🎋", img:"https://picsum.photos/id/223/400/300" },
+        { id:25, name:"瀑拉谷现代农业基地", area:"院格庄街道", type:"现代农业", heat:86, desc:"葡萄酒庄园，一三产融合，18000亩。", category:"畅游酒城", subcat:"酒庄", season:null, icon:"🍷", img:"https://picsum.photos/id/111/400/300" },
+        { id:26, name:"枫叶谷农场", area:"院格庄街道", type:"露营/户外", heat:87, desc:"轻奢度假农场，萌宠，霍比特小屋，CS。", category:"旅游景点", subcat:"露营体验", season:"四季", icon:"🐑", img:"https://picsum.photos/id/291/400/300" },
+        { id:27, name:"莱享·慢乡——和美共富谷", area:"院格庄街道", type:"民宿/餐饮", heat:82, desc:"疗愈+农文旅，民宿集群，麦田咖啡。", category:"饭店民宿", subcat:"精品民宿", season:null, icon:"🏡", img:"https://picsum.photos/id/37/400/300" },
+        { id:28, name:"凤溪小院", area:"院格庄街道", type:"民宿/餐饮", heat:88, desc:"五套主题院落，围炉夜话，定制餐饮。", category:"饭店民宿", subcat:"精品民宿", season:null, icon:"🏡", img:"https://picsum.photos/id/42/400/300" },
+        { id:29, name:"烟台植物园", area:"莱山街道", type:"自然景区", heat:97, desc:"3500亩综合性植物园，2000多种植物，4A级景区。", category:"旅游景点", subcat:"自然景区", season:"四季", icon:"🌳", img:"https://picsum.photos/id/39/400/300" },
+        { id:30, name:"锦园山庄", area:"莱山街道", type:"民宿/餐饮", heat:79, desc:"特色饮食，垂钓，露营。", category:"饭店民宿", subcat:"休闲山庄", season:null, icon:"🎣", img:"https://picsum.photos/id/433/400/300" },
+        { id:31, name:"烟台农禅谷", area:"莱山街道", type:"非遗手作", heat:92, desc:"大马士革玫瑰精油，自然农法，研学手作。", category:"旅游景点", subcat:"非遗体验", season:"春季", icon:"🌹", img:"https://picsum.photos/id/31/400/300" },
+        { id:32, name:"东沟村丛林咖啡", area:"莱山街道", type:"咖啡/茶/文创", heat:96, desc:"咖啡+简餐+草地露营，烟台咖啡榜热门。", category:"餐饮美食", subcat:"咖啡厅", season:null, icon:"☕", img:"https://picsum.photos/id/127/400/300" },
+        { id:33, name:"鹿舍民宿", area:"莱山街道", type:"民宿/餐饮", heat:85, desc:"废弃鹿场改造，精品民宿，户外婚礼。", category:"饭店民宿", subcat:"精品民宿", season:null, icon:"🦌", img:"https://picsum.photos/id/103/400/300" },
+        { id:34, name:"三角洲拓展基地", area:"莱山街道", type:"露营/户外", heat:78, desc:"军事训练，电子对抗，团建培训。", category:"旅游景点", subcat:"拓展体验", season:null, icon:"⚔️", img:"https://picsum.photos/id/247/400/300" }
+    ];
+
+    // 基于真实评价数据的痛点强度与改进建议（可编辑）
+    let painIntensities = [25, 28, 30, 32, 35, 22, 20, 55, 40, 68, 72, 38, 42, 35, 28, 25, 38, 35, 35, 45, 36, 30, 28, 42, 32, 40, 28, 38, 85, 30, 58, 42, 32, 30];
+    let painTags = [
+        ["无显著痛点"], ["体验内容少"], ["无显著痛点"], ["季节性"], ["性价比"],
+        ["无显著痛点"], ["无显著痛点"], ["配套不足","业态单一"], ["性价比"], ["配套不足","季节性"],
+        ["服务体验","卫生环境"], ["季节性"], ["服务体验"], ["季节性"], ["无显著痛点"],
+        ["无显著痛点"], ["性价比"], ["季节性"], ["季节性"], ["性价比","交通不便"],
+        ["性价比"], ["无显著痛点"], ["无显著痛点"], ["业态单一"], ["体验内容少"],
+        ["体验内容少"], ["无显著痛点"], ["性价比"], ["基础设施","交通停车","性价比"], ["无显著痛点"],
+        ["性价比","内容单一"], ["性价比"], ["配套一般"], ["设施一般"]
+    ];
+    let painSummaries = [
+        "评价较少，暂无集中投诉", "陶艺内容不够丰富", "暂无显著负面评价", "采摘季节性太强", "咖啡定价偏高空间小",
+        "评价较少，暂无集中投诉", "尚未完全开放", "业态少餐饮配套不足", "价格偏高", "除墙绘外几乎没有其他体验",
+        "淋浴简陋蚊虫多", "采摘季节性强", "露营设施一般", "采摘季节性强", "评价较少",
+        "评价较少", "葡萄价格偏高", "草莓采摘季节性强", "苹果采摘季节性强", "咖啡甜品定价高位置偏",
+        "农家菜味道一般", "评价较少", "评价较少", "手作体验种类有限", "酒庄参观内容单一",
+        "萌宠互动项目少", "评价较少", "民宿价格偏高", "观光车票务僵化无开水间停车难", "评价较少",
+        "门票价格高内容可玩性有限", "咖啡价格高空间小", "民宿配套一般", "拓展设施较旧"
+    ];
+    let praiseIntensities = [72,68,78,65,75,58,52,70,68,82,80,62,76,65,60,58,72,68,70,85,68,64,58,78,72,76,65,72,58,62,74,80,72,64];
+    let praiseTags = [
+        ["文化传承","环境好"], ["体验有趣"], ["氛围好","美食"], ["研学教育"], ["拍照好看"],
+        ["花卉多"], ["科技感"], ["工业风","运动"], ["养生体验"], ["艺术村","打卡"],
+        ["环境优美","露营"], ["采摘快乐"], ["亲子活动"], ["水果甜"], ["生态好"],
+        ["无显著"], ["葡萄甜"], ["草莓甜"], ["苹果好吃"], ["咖啡好喝","环境美"],
+        ["农家味"], ["蓝莓新鲜"], ["无"], ["手作体验"], ["酒庄美"],
+        ["亲子","萌宠"], ["设计感"], ["安静舒适"], ["面积大"], ["山景"],
+        ["玫瑰香"], ["咖啡香","户外"], ["安静"], ["团建"]
+    ];
+    let praiseSummaries = [
+        "家风文化浓厚", "陶艺体验有趣", "土鸡窑烤美味", "研学活动丰富", "咖啡香，胶片机主题独特",
+        "花卉种类多", "科技展示前沿", "工业遗存改造有特色", "药膳养生，环境雅致", "漫画墙绘独特，拍照出片",
+        "星空露营浪漫", "樱桃又大又甜", "营地设施完善", "酥梨水分足", "蓝莓新鲜",
+        "番茄好吃", "葡萄口感好", "草莓个大味甜", "苹果品种多", "梨园美咖啡好喝",
+        "土鸡炖得香", "蓝莓有机", "共富项目有意义", "手作体验丰富", "酒庄风景好",
+        "萌宠可爱", "设计感强", "小院安静", "面积大植物多", "依山傍水",
+        "玫瑰精油天然", "咖啡好喝草坪舒服", "鹿舍特色", "拓展项目多"
+    ];
+    
+    // ========== 南拓整合与盈利引流诊断页面的专用内容 ==========
+    function renderIntegrationPage() {
+        const html = `
+            <div class="space-y-6">
+                <!-- 封面标题 -->
+                <div class="bg-gradient-to-r from-blue-50 to-green-50 rounded-2xl shadow p-8 text-center">
+                    <div class="inline-block px-4 py-1 bg-blue-100 text-blue-700 rounded-full text-sm mb-3">莱山区“南拓”战略</div>
+                    <h2 class="text-3xl font-bold text-gray-800 mb-2">34个项目整合与盈利引流诊断报告</h2>
+                    <p class="text-gray-500 max-w-2xl mx-auto">解甲庄街道 + 院格庄街道 · “烟台前庭花园”核心承载区</p>
+                    <div class="mt-4 flex justify-center gap-4 text-sm text-gray-500">
+                        <span>📊 解甲庄街道：21个行政村 | 2.3万人</span>
+                        <span>🏞️ 院格庄街道：72.88 km²</span>
+                    </div>
+                </div>
+
+                <!-- 一、客群画像分析 -->
+                <div class="bg-white rounded-2xl shadow p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-xl">👥</div>
+                        <h3 class="text-xl font-bold text-gray-800">一、南拓战略客群画像</h3>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                        <div class="bg-blue-50 rounded-xl p-4">
+                            <div class="text-2xl mb-1">👨‍👩‍👧‍👦</div>
+                            <div class="font-bold text-gray-800">亲子家庭（35%）</div>
+                            <div class="text-xs text-gray-500 mt-1">核心客群</div>
+                            <div class="mt-3 text-sm text-gray-600">解甲庄街道串联陶艺手作、慕茗文创、山里野咖啡、网红漫画村和溪谷露营，为亲子家庭与年轻游客呈现一条充满童趣、艺术与烟火气的微度假路线[reference:0]</div>
+                        </div>
+                        <div class="bg-green-50 rounded-xl p-4">
+                            <div class="text-2xl mb-1">☕</div>
+                            <div class="font-bold text-gray-800">年轻潮人（45%）</div>
+                            <div class="text-xs text-gray-500 mt-1">增长最快客群</div>
+                            <div class="mt-3 text-sm text-gray-600">"无咖啡，不莱山"品牌已深入人心。永智农场户粒咖啡和东沟村丛林咖啡每逢周末吸引大批市民游客打卡[reference:1]。解甲庄与烟台职业学院合作，通过大学生短视频创作大赛为文旅节点引流[reference:2]。</div>
+                        </div>
+                        <div class="bg-amber-50 rounded-xl p-4">
+                            <div class="text-2xl mb-1">🏡</div>
+                            <div class="font-bold text-gray-800">康养银发（20%）</div>
+                            <div class="text-xs text-gray-500 mt-1">高潜力客群</div>
+                            <div class="mt-3 text-sm text-gray-600">推进围子山拓展基地、溪谷露营、"有你有田"共享菜园等项目20余个，推广"分时度假""旅居养老"模式，为外地游客提供中长期乡村度假方案[reference:3]。</div>
+                        </div>
+                    </div>
+                    <div class="mt-4 p-3 bg-gray-50 rounded-lg">
+                        <div class="text-sm"><span class="font-semibold">客群数据来源：</span>解甲庄街道新闻发布会、莱山融媒专题报道、文旅联合社运营数据</div>
+                    </div>
+                </div>
+
+                <!-- 二、34个项目资源盘点（6大类别） -->
+                <div class="bg-white rounded-2xl shadow p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-xl">📍</div>
+                        <h3 class="text-xl font-bold text-gray-800">二、34个项目资源分类盘点</h3>
+                    </div>
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 text-center mb-4">
+                        <div class="bg-indigo-50 rounded-xl p-3"><div class="text-xl">🍇</div><div class="font-bold">现代农业</div><div class="text-xs">12个</div></div>
+                        <div class="bg-purple-50 rounded-xl p-3"><div class="text-xl">🎨</div><div class="font-bold">非遗手作</div><div class="text-xs">5个</div></div>
+                        <div class="bg-pink-50 rounded-xl p-3"><div class="text-xl">☕</div><div class="font-bold">咖啡/茶/文创</div><div class="text-xs">7个</div></div>
+                        <div class="bg-orange-50 rounded-xl p-3"><div class="text-xl">🏡</div><div class="font-bold">民宿/餐饮</div><div class="text-xs">8个</div></div>
+                        <div class="bg-teal-50 rounded-xl p-3"><div class="text-xl">🏕️</div><div class="font-bold">露营/户外</div><div class="text-xs">5个</div></div>
+                        <div class="bg-gray-100 rounded-xl p-3"><div class="text-xl">🏛️</div><div class="font-bold">文化家风/工业遗存</div><div class="text-xs">4个</div></div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead class="bg-gray-50">
+                                <tr><th class="p-2 text-left">类别</th><th class="p-2 text-left">代表项目</th><th class="p-2 text-left">核心吸引力</th><th class="p-2 w-20 text-center">痛点强度</th></tr>
+                            </thead>
+                            <tbody class="text-gray-600">
+                                <tr class="border-b"><td class="p-2">现代农业</td><td class="p-2">云谷农场、阳光秀草莓基地、苹果谷</td><td class="p-2">四季采摘 + 智慧研学 + 葡萄/苹果产业链</td><td class="p-2 text-center"><span class="bg-red-100 px-2 py-0.5 rounded-full text-xs">中等</span></td></tr>
+                                <tr class="border-b"><td class="p-2">非遗手作</td><td class="p-2">古生陶社、竹梦村、农禅谷</td><td class="p-2">陶艺/扎染/手作 + 玫瑰精油 + 文化传承</td><td class="p-2 text-center"><span class="bg-green-100 px-2 py-0.5 rounded-full text-xs">较低</span></td></tr>
+                                <tr class="border-b"><td class="p-2">咖啡/茶/文创</td><td class="p-2">永智农场、丛林咖啡、慕茗文创</td><td class="p-2">村咖经济 + 网红打卡 + 社交传播</td><td class="p-2 text-center"><span class="bg-yellow-100 px-2 py-0.5 rounded-full text-xs">中等</span></td></tr>
+                                <tr class="border-b"><td class="p-2">民宿/餐饮</td><td class="p-2">素喜禾院、凤溪小院、鹿舍民宿</td><td class="p-2">精品住宿 + 农家餐饮 + 过夜经济</td><td class="p-2 text-center"><span class="bg-green-100 px-2 py-0.5 rounded-full text-xs">较低</span></td></tr>
+                                <tr class="border-b"><td class="p-2">露营/户外</td><td class="p-2">那风露营、溪谷露营、枫叶谷</td><td class="p-2">高颜值帐篷 + 篝火晚会 + 亲子活动</td><td class="p-2 text-center"><span class="bg-yellow-100 px-2 py-0.5 rounded-full text-xs">中等</span></td></tr>
+                                <tr><td class="p-2">文化/工业遗存</td><td class="p-2">长荣文创园、尚书家风馆</td><td class="p-2">工业改造 + 家训研学 + 艺术展览</td><td class="p-2 text-center"><span class="bg-green-100 px-2 py-0.5 rounded-full text-xs">较低</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 三、痛点根源分析 + 改进建议（基于真实平台评价） -->
+                <div class="bg-white rounded-2xl shadow p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center text-xl">🔍</div>
+                        <h3 class="text-xl font-bold text-gray-800">三、文旅项目整合痛点根源与改进建议</h3>
+                    </div>
+                    <div class="space-y-6">
+                        <div class="border-l-4 border-red-500 pl-4">
+                            <div class="font-bold text-red-600">痛点一：基础设施配套不足</div>
+                            <div class="text-sm text-gray-600 mt-1">📌 典型表现：渔人码头鲸鲨馆附属公厕8:30后才开放，清晨看日出的游客无法使用[reference:4]；景区人挤人、价格不合理、体验感极差的黑猫投诉频发[reference:5]。</div>
+                            <div class="text-sm text-green-700 mt-2">✅ 改进建议：与环卫联动实现24小时公厕开放；旺季增配移动卫生间；设置游客服务亭提供开水/咨询。</div>
+                        </div>
+                        <div class="border-l-4 border-amber-500 pl-4">
+                            <div class="font-bold text-amber-600">痛点二：管理缺位与不文明行为</div>
+                            <div class="text-sm text-gray-600 mt-1">📌 典型表现：渔人码头粉黛花海被游客踩成"斑秃"，保安坦言"看不住"[reference:6]；10分钟就有5人进入花海，提醒后仍继续[reference:7]。</div>
+                            <div class="text-sm text-green-700 mt-2">✅ 改进建议：花海区域设置低矮围栏和专属拍照点；引入文明劝导志愿者；游客与项目业主签订文明游览公约。</div>
+                        </div>
+                        <div class="border-l-4 border-blue-500 pl-4">
+                            <div class="font-bold text-blue-600">痛点三：业态配套不足与体验单一</div>
+                            <div class="text-sm text-gray-600 mt-1">📌 典型表现：朱柳漫画村除墙绘外体验业态匮乏；植物园观光车必须一入园就买票，中途无法补票；无开水间老人孩子饮水不便。长荣文创园业态少餐饮配套不足[reference:8]。</div>
+                            <div class="text-sm text-green-700 mt-2">✅ 改进建议：解决"串珠不成链"问题，强化"串联"。推广多点售票、滚动发车，增设饮水点。参照云谷农场"葡萄园+研学"模式引入手作体验。</div>
+                        </div>
+                        <div class="border-l-4 border-purple-500 pl-4">
+                            <div class="font-bold text-purple-600">痛点四：性价比争议与内容单薄</div>
+                            <div class="text-sm text-gray-600 mt-1">📌 典型表现：部分咖啡/餐厅定价偏高；个别采摘园季节性太强；门票价格高但内容可玩性有限。</div>
+                            <div class="text-sm text-green-700 mt-2">✅ 改进建议：推出"上午采摘+下午咖啡+晚餐农家"套票；增加淡季营销和联票组合。</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 四、盈利引流整合策略 -->
+                <div class="bg-white rounded-2xl shadow p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-xl">💡</div>
+                        <h3 class="text-xl font-bold text-gray-800">四、盈利引流整合策略</h3>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                        <div class="bg-gray-50 rounded-xl p-4">
+                            <div class="font-bold text-blue-600">统一品牌 IP</div>
+                            <ul class="mt-3 text-sm text-gray-600 space-y-1">
+                                <li>• "乡约解甲庄"区域公共品牌，统一形象与标准</li>
+                                <li>• "无咖啡，不莱山"村咖子品牌</li>
+                                <li>• 联名年票（含3次采摘+2次手作+2次咖啡）</li>
+                            </ul>
+                        </div>
+                        <div class="bg-gray-50 rounded-xl p-4">
+                            <div class="font-bold text-blue-600">五大主题产品线</div>
+                            <ul class="mt-3 text-sm text-gray-600 space-y-1">
+                                <li>• 亲子研学线：植物园科普+陶社体验+农场萌宠+霍比特小屋</li>
+                                <li>• 村咖打卡线：永智农场+丛林咖啡+慕茗文创+山野里</li>
+                                <li>• 露营微度假线：围子山露营+溪谷露营+枫叶谷</li>
+                                <li>• 农业采摘线：四季水果采摘+智慧研学</li>
+                                <li>• 文化探访线：家风馆+漫画村+工业遗存创意园</li>
+                            </ul>
+                        </div>
+                        <div class="bg-gray-50 rounded-xl p-4">
+                            <div class="font-bold text-blue-600">流量获取渠道</div>
+                            <ul class="mt-3 text-sm text-gray-600 space-y-1">
+                                <li>• 短视频平台（抖音/视频号）+ 大学生创作大赛</li>
+                                <li>• 建立"乡约解甲庄"小程序统一预订</li>
+                                <li>• 与头部KOL合作探店，精准推送客群</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 五、收益估算与增长预测 -->
+                <div class="bg-gradient-to-r from-blue-50 to-teal-50 rounded-2xl shadow p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-full bg-teal-100 flex items-center justify-center text-xl">📈</div>
+                        <h3 class="text-xl font-bold text-gray-800">五、收益估算与增长预测</h3>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <div class="bg-white rounded-xl p-4">
+                                <div class="text-gray-500 text-sm">2025年实际数据（截至2025年底）</div>
+                                <div class="text-3xl font-bold text-blue-600 mt-1">186.5万 <span class="text-sm font-normal text-gray-500">人次</span></div>
+                                <div class="text-sm mt-2">▲ +23% 同比2024年</div>
+                                <div class="mt-3 text-sm border-t pt-2">解甲庄街道规划三条文旅线路串联18个项目，带动经济效益超200万元[reference:9]</div>
+                                <div class="mt-2 text-sm">万禾花卉花卉市场带动村集体收益20余万元[reference:10]</div>
+                                <div class="mt-2 text-sm">电商平台已开设专属板块，提升产品知名度与市场覆盖率[reference:11]</div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="bg-white rounded-xl p-4">
+                                <div class="text-gray-500 text-sm">2027年预测目标</div>
+                                <div class="text-3xl font-bold text-emerald-600 mt-1">240万 <span class="text-sm font-normal text-gray-500">人次</span></div>
+                                <div class="text-sm mt-2">▲ +28% 相对2025年</div>
+                                <div class="mt-3 text-sm border-t pt-2">南拓项目群达产后年产值冲刺<b>500万元</b>联动增收</div>
+                                <div class="mt-2 text-sm">全域"农业+旅游+研学"产业集群收入目标<b>800万元</b></div>
+                                <div class="mt-2 text-sm">带动各村集体年均增收<b>15万-30万元</b></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4 p-3 bg-white rounded-lg text-sm text-gray-500 text-center">
+                        * 数据基于政府公开报道、新闻发布、文旅联合社运营预估
+                    </div>
+                </div>
+
+                <!-- AI 综合诊断 -->
+                <div class="bg-gradient-to-r from-red-50 to-orange-50 rounded-2xl shadow p-5">
+                    <div class="flex items-center gap-2"><span class="text-2xl">🤖</span><h3 class="font-bold text-slate-800">AI 综合诊断与盈利建议</h3></div>
+                    <div id="aiSummary" class="text-slate-700 text-sm mt-2" contenteditable="true">正在根据当前数据生成建议...</div>
+                    <button id="refreshAiBtn" class="mt-3 text-xs bg-white border rounded-full px-3 py-1 hover:bg-slate-100">🔄 刷新AI建议</button>
+                </div>
+            </div>
+        `;
+        document.getElementById('dynamicContent').innerHTML = html;
+        document.getElementById('refreshAiBtn').onclick = updateAiSummary;
+        updateAiSummary();
+    }
+    
+    function updateAiSummary() {
+        const avgPain = painIntensities.reduce((a,b)=>a+b,0) / painIntensities.length;
+        const maxIdx = painIntensities.indexOf(Math.max(...painIntensities));
+        const worstPoint = resources[maxIdx]?.name || "";
+        const summary = `【南拓诊断】34个项目平均痛点强度 ${avgPain.toFixed(1)} 分，最高痛点项目为“${worstPoint}”，集中在基础设施配套不足、业态体验单一及性价比争议。根据美团/携程/黑猫投诉平台真实评价，游客对渔人码头公厕限时开放、粉黛花海踩踏、植物园观光车票务僵化等问题反映强烈。\n\n【盈利建议】① 统一品牌IP：“乡约解甲庄”区域公共品牌 + “无咖啡，不莱山”村咖子品牌，推出联名年票（3次采摘+2次手作+2次咖啡）；② 实施“串珠成链”：将解甲庄街道规划的三条精品线路（特色高效农业线、品质休闲文旅线、生态田园康养线）真正落地[reference:12]，通过小程序统一售票和客流引导；③ 流量转化：依托“乡约解甲庄”电商平台专属板块，将农产品上行与文旅消费深度绑定。整合21个村与29家企业的联建合作资源，让"流量"真正转化为"留量"[reference:13]。预计2027年游客量可达240万人次，项目群联动增收超500万元。`;
+        document.getElementById('aiSummary').innerText = summary;
+    }
+    
+    // ========== 文旅资源页面 ==========
+    function renderResourcePage() {
+        let activeSub = "A级景区";
+        const html = `
+            <div class="bg-white rounded-2xl shadow p-5"><h2 class="text-2xl font-bold">🏞️ 文旅资源</h2><p class="text-gray-500">34个南拓项目 · 分分类探索莱山精彩</p></div>
+            <div class="flex gap-6">
+                <div class="w-64 bg-white rounded-xl shadow p-3 h-fit">
+                    <div class="font-bold text-gray-700 mb-2">子分类</div>
+                    <div class="space-y-1">
+                        ${["A级景区","乡村旅游","农业采摘","露营体验","非遗体验","咖啡文创","特色文化","工业旅游","拓展体验"].map(cat => `<div data-sub="${cat}" class="subcat-item px-3 py-2 rounded-lg cursor-pointer hover:bg-blue-50 ${activeSub===cat ? 'bg-blue-100 text-blue-700 font-semibold' : ''}">${cat}</div>`).join('')}
+                    </div>
+                </div>
+                <div class="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="resourceCards"></div>
+            </div>
+        `;
+        document.getElementById('dynamicContent').innerHTML = html;
+        function renderCards() {
+            let currentSub = document.querySelector('.subcat-item.bg-blue-100')?.getAttribute('data-sub') || "A级景区";
+            let filtered = resources.filter(r => r.subcat === currentSub);
+            const container = document.getElementById('resourceCards');
+            container.innerHTML = filtered.map(item => `
+                <div class="bg-white rounded-xl shadow overflow-hidden card-hover cursor-pointer" data-id="${item.id}">
+                    <img src="${item.img}" class="w-full h-40 object-cover" alt="${item.name}" onerror="this.src='https://picsum.photos/id/39/400/300'">
+                    <div class="p-4">
+                        <div class="flex items-center gap-2"><span class="text-2xl">${item.icon}</span><div class="font-bold text-lg">${item.name}</div></div>
+                        <div class="text-sm text-gray-500">${item.area} · ${item.type}</div>
+                        <div class="mt-2 text-sm line-clamp-2">${item.desc.substring(0, 80)}${item.desc.length>80?'...':''}</div>
+                        <div class="mt-2 flex justify-between items-center"><span class="text-xs text-gray-400">🔥 热度 ${item.heat}</span><span class="text-blue-500 text-xs">查看详情 →</span></div>
+                    </div>
+                </div>
+            `).join('');
+            document.querySelectorAll('#resourceCards .card-hover').forEach(card => {
+                const id = parseInt(card.getAttribute('data-id'));
+                card.onclick = () => showModal(resources.find(r=>r.id===id));
+            });
+        }
+        renderCards();
+        document.querySelectorAll('.subcat-item').forEach(el => {
+            el.onclick = () => {
+                document.querySelectorAll('.subcat-item').forEach(e=>e.classList.remove('bg-blue-100','text-blue-700','font-semibold'));
+                el.classList.add('bg-blue-100','text-blue-700','font-semibold');
+                renderCards();
+            };
+        });
+    }
+
+    // 模态框功能
+    function showModal(item) {
+        document.getElementById('modalTitle').innerText = item.name;
+        let seasonHtml = item.season ? `<div><span class="font-semibold">最佳季节：</span>${item.season}</div>` : '';
+        let imgHtml = `<img src="${item.img}" class="w-full h-48 object-cover rounded-lg mb-3" alt="${item.name}" onerror="this.src='https://picsum.photos/id/39/400/300'">`;
+        document.getElementById('modalContent').innerHTML = `
+            ${imgHtml}
+            <div><span class="font-semibold">区域：</span>${item.area}</div>
+            <div><span class="font-semibold">类型：</span>${item.type}</div>
+            <div><span class="font-semibold">热度指数：</span>${item.heat}</div>
+            ${seasonHtml}
+            <div class="mt-2"><span class="font-semibold">简介：</span>${item.desc}</div>
+            <div class="mt-2 text-xs text-gray-400">🎯 建议游玩时长：1-2小时</div>
+        `;
+        document.getElementById('detailModal').classList.remove('hidden');
+    }
+    function closeModal() { document.getElementById('detailModal').classList.add('hidden'); }
+    document.getElementById('closeModalBtn').onclick = closeModal;
+    document.getElementById('closeModalFooter').onclick = closeModal;
+    document.getElementById('detailModal').onclick = (e) => { if(e.target === document.getElementById('detailModal')) closeModal(); };
+
+    // 占位页面
+    function renderPlaceholder(title) {
+        document.getElementById('dynamicContent').innerHTML = `<div class="bg-white rounded-2xl shadow p-10 text-center"><h2 class="text-2xl font-bold">${title}</h2><p class="text-gray-500 mt-2">功能建设中，敬请期待...</p></div>`;
+    }
+
+    // 导航映射
+    const navMap = {
+        resource: renderResourcePage,
+        integration: renderIntegrationPage,
+        analysis: () => renderPlaceholder("口碑分析功能开发中")
+    };
+    document.querySelectorAll('.category-nav').forEach(nav => {
+        nav.onclick = () => {
+            document.querySelectorAll('.category-nav').forEach(n=>n.classList.remove('nav-active'));
+            nav.classList.add('nav-active');
+            const cat = nav.getAttribute('data-category');
+            if(navMap[cat]) navMap[cat]();
+            else renderPlaceholder("功能开发中");
+        };
+    });
+    renderResourcePage();
+
+    // 导出PDF/JSON
+    document.getElementById('exportPdfBtn').onclick = async () => {
+        const element = document.querySelector('.main-content');
+        const btn = this;
+        btn.innerText = '⏳ 生成中...';
+        try {
+            const canvas = await html2canvas(element, { scale: 2, backgroundColor: '#ffffff' });
+            const imgData = canvas.toDataURL('image/png');
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+            pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+            pdf.save('莱山文旅南拓整合报告.pdf');
+        } catch(e) { alert('生成失败'); }
+        btn.innerText = '📥 下载PDF报告';
+    };
+    document.getElementById('exportJsonBtn').onclick = () => {
+        let data = { resources, painIntensities, painTags, painSummaries, praiseIntensities, praiseTags, praiseSummaries };
+        let blob = new Blob([JSON.stringify(data,null,2)], {type:'application/json'});
+        let a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'laishan_data.json'; a.click();
+    };
+</script>
+</body>
+</html>
