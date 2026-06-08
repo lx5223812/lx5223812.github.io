@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CulturAI · 文化资源智能分析平台 | 纯前端版（无需后端）</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Inter',sans-serif; background:#0A0F0D; color:#E0E0E0; height:100vh; overflow:hidden; }
+        .platform { display:flex; height:100vh; width:100%; }
+        .sidebar { width:300px; background:#111816; color:#CCCCCC; display:flex; flex-direction:column; box-shadow:2px 0 20px rgba(0,0,0,0.5); z-index:10; border-right:1px solid #2A3A32; }
+        .logo-area { padding:28px 24px; border-bottom:1px solid #2A3A32; }
+        .logo-area h2 { font-size:1.5rem; font-weight:700; color:#F0B84D; letter-spacing:-0.3px; }
+        .logo-area p { font-size:0.7rem; opacity:0.6; margin-top:6px; }
+        .nav-item { padding:18px 24px; cursor:pointer; transition:0.2s; border-left:4px solid transparent; display:flex; align-items:center; gap:14px; font-weight:500; color:#BBBBBB; }
+        .nav-item i { width:28px; font-size:1.2rem; }
+        .nav-item.active { background:#1E2F28; border-left-color:#F0B84D; color:#FFFFFF; }
+        .nav-item:hover:not(.active) { background:#1A2A24; color:#F0B84D; }
+        .main-content { flex:1; overflow-y:auto; padding:28px 36px; background:#0F1412; }
+        .data-sources-bar { background:#131C18; border-radius:28px; padding:16px 24px; margin-bottom:28px; display:flex; flex-wrap:wrap; gap:24px; border:1px solid #2A3A32; }
+        .source-badge { display:flex; align-items:center; gap:10px; background:#1A2620; padding:8px 20px; border-radius:60px; font-size:0.85rem; font-weight:500; border:1px solid #2E4A3C; }
+        .source-badge i { color:#F0B84D; }
+        .insight-card { background:#151E1A; border-radius:32px; margin-bottom:32px; border:1px solid #2A3A32; overflow:hidden; }
+        .card-header { background:#1A2620; padding:18px 28px; border-bottom:1px solid #2A3A32; font-weight:700; font-size:1.1rem; display:flex; align-items:center; gap:12px; color:#F0B84D; }
+        .graph-container { height:300px; width:100%; background:#0E1412; border-radius:24px; border:1px solid #2E4A3C; padding:8px; margin:0 0 16px 0; }
+        .data-preview { background:#0E1412; border-radius:20px; padding:16px; font-size:0.85rem; margin-top:12px; border:1px solid #2A3A32; color:#CCCCCC; }
+        .tool-tag { background:#1A2620; padding:4px 14px; border-radius:30px; font-size:0.7rem; font-weight:600; display:inline-block; margin:4px; border:1px solid #F0B84D40; color:#F0B84D; }
+        button { background:#F0B84D; border:none; padding:10px 24px; border-radius:40px; color:#111816; font-weight:700; cursor:pointer; transition:0.2s; margin-top:12px; font-size:0.85rem; }
+        button:hover { background:#e0a73e; transform:translateY(-1px); }
+        textarea { width:100%; border-radius:24px; border:1px solid #2E4A3C; padding:14px; background:#0E1412; color:#E0E0E0; font-family:'Inter',monospace; resize:vertical; font-size:0.85rem; }
+        input[type="file"] { margin:12px 0; color:#CCCCCC; background:#0E1412; border:1px solid #2E4A3C; border-radius:40px; padding:8px 16px; }
+        .loading { text-align:center; padding:50px; color:#F0B84D; }
+        table { width:100%; border-collapse:collapse; }
+        th, td { border:1px solid #2E4A3C; padding:12px; text-align:left; font-size:0.8rem; color:#DDD; }
+        th { background:#1A2620; color:#F0B84D; }
+        .status-badge { display:inline-block; width:10px; height:10px; border-radius:10px; margin-right:6px; }
+        .status-success { background:#1B5E42; }
+        footer { text-align:center; font-size:0.7rem; color:#888; padding:24px 0 16px; }
+        ::-webkit-scrollbar { width:6px; }
+        ::-webkit-scrollbar-track { background:#0A0F0D; }
+        ::-webkit-scrollbar-thumb { background:#2A3A32; border-radius:4px; }
+    </style>
+</head>
+<body>
+<div class="platform">
+    <div class="sidebar">
+        <div class="logo-area">
+            <h2><i class="fas fa-microchip"></i> CulturAI</h2>
+            <p>文化资源智能策劃引擎 · 纯前端版</p>
+        </div>
+        <div class="nav-item active" data-tab="culture"><i class="fas fa-cube"></i> 文化图谱分析</div>
+        <div class="nav-item" data-tab="crowd"><i class="fas fa-users"></i> 客群分析</div>
+        <div class="nav-item" data-tab="competitor"><i class="fas fa-chart-line"></i> 竞品分析</div>
+    </div>
+    <div class="main-content">
+        <div class="data-sources-bar">
+            <div class="source-badge"><i class="fas fa-file-alt"></i> 上传文件 <span id="fileStatusBadge">未上传</span></div>
+            <div class="source-badge"><i class="fab fa-twitter"></i> 大数据爬取 <span id="socialStatusBadge">前端模拟</span></div>
+            <div class="source-badge"><i class="fas fa-database"></i> 政府数据 <span id="govStatusBadge">前端模拟</span></div>
+        </div>
+
+        <!-- 文化图谱模块 -->
+        <div id="culturePanel" class="tab-panel">
+            <div class="insight-card">
+                <div class="card-header"><i class="fas fa-upload"></i> 1. 上传文化资料（TXT）或粘贴文本</div>
+                <div style="padding:0 28px 24px 28px;">
+                    <textarea id="cultureText" rows="4" placeholder="粘贴村志、传说、碑刻、蚝文化等内容..."></textarea>
+                    <input type="file" id="cultureFile" accept=".txt" style="margin:12px 0;">
+                    <button id="analyzeCultureBtn"><i class="fas fa-brain"></i> 开始AI解析</button>
+                </div>
+            </div>
+            <div id="cultureResult"></div>
+        </div>
+
+        <!-- 客群分析模块 -->
+        <div id="crowdPanel" class="tab-panel" style="display:none;">
+            <div class="insight-card">
+                <div class="card-header"><i class="fas fa-chart-pie"></i> 客群聚类分析 (K-Means 模拟)</div>
+                <div style="padding:0 28px 24px 28px;">
+                    <label style="font-weight:500;">目标地点：</label>
+                    <input id="locationInput" value="横琴红旗村" style="width:260px; padding:8px 16px; border-radius:40px; border:1px solid #2E4A3C; background:#0E1412; color:#E0E0E0; margin-left:12px;">
+                    <button id="analyzeCrowdBtn" style="margin-left:16px;"><i class="fas fa-cloud-download-alt"></i> 执行聚类分析</button>
+                </div>
+            </div>
+            <div id="crowdResult"></div>
+        </div>
+
+        <!-- 竞品分析模块 -->
+        <div id="competitorPanel" class="tab-panel" style="display:none;">
+            <div class="insight-card">
+                <div class="card-header"><i class="fas fa-map-marker-alt"></i> 周边竞品分析 (模拟POI)</div>
+                <div style="padding:0 28px 24px 28px;">
+                    <button id="analyzeCompetitorBtn"><i class="fas fa-chart-simple"></i> 生成竞品矩阵</button>
+                </div>
+            </div>
+            <div id="competitorResult"></div>
+        </div>
+        <footer>纯前端版 · 所有分析均在浏览器执行，无需后端。如需真实数据对接，请参考后端代码部署说明。</footer>
+    </div>
+</div>
+
+<script>
+    // ==================== 前端模拟分析逻辑 ====================
+    function extractKeywords(text) {
+        const stopWords = ['的','了','是','在','和','与','有','个','这','那','也','都','不','很','又','及','或','对','而','并','到','为','以','于','上','下','中','将'];
+        const words = text.split(/[\s,，。；;！!？?、:：()（）[\]【】\n\r\t]+/);
+        const freq = {};
+        for(let w of words) if(w.length>1 && !stopWords.includes(w)) freq[w] = (freq[w]||0)+1;
+        return Object.entries(freq).sort((a,b)=>b[1]-a[1]).slice(0,16).map(v=>v[0]);
+    }
+
+    function classifyTypes(text) {
+        const patterns = {
+            '蚝文化·非遗': /蚝|非遗|养殖|蚝壳|海鲜|渔/,
+            '琴澳传说·仙女': /仙女|传说|琴澳|同源|瀑布|相思/,
+            '葡式海丝印记': /葡|碑刻|海丝|贸易|澳门|口岸/,
+            '山水格局': /山|瀑布|自然|郊野|生态/,
+            '民俗节庆': /节|民俗|庙会|传统/
+        };
+        let scores = {};
+        for(let [key, regex] of Object.entries(patterns)) {
+            let matches = (text.match(regex) || []).length;
+            scores[key] = Math.min(matches * 8 + 10, 45);
+        }
+        let total = Object.values(scores).reduce((a,b)=>a+b,0);
+        if(total<1) total=100;
+        return Object.entries(scores).map(([name,val]) => ({ name, value: Math.round(val/total*100) }));
+    }
+
+    function buildKnowledgeGraph(keywords) {
+        let nodes = keywords.slice(0,6).map((k,idx) => ({ name: k, symbolSize: 32+idx*2, itemStyle: { color: ['#1F5A44','#CA913F','#8B6B3C'][idx%3] } }));
+        let links = [];
+        for(let i=0;i<nodes.length-1;i++) links.push({ source: nodes[i].name, target: nodes[i+1].name });
+        if(nodes.length>2) links.push({ source: nodes[0].name, target: nodes[2].name });
+        return { nodes, links };
+    }
+
+    function analyzeCultureFrontend(text) {
+        const keywords = extractKeywords(text);
+        const types = classifyTypes(text);
+        const timeline = { eras: ['明清','近代','现代','当代','未来'], data: [70,65,45,88,96] };
+        const spaceNodes = { nodes: ['相思瀑布','赠琴广场','旧村蚝巷','码头枢纽','山海步道'], values: [95,82,88,79,74] };
+        const kg = buildKnowledgeGraph(keywords);
+        return { keywords, types, timeline, spaceNodes, kg };
+    }
+
+    function analyzeCrowdFrontend() {
+        return {
+            clusters: [
+                { name: "文艺青年", value: 42, demands: ["古琴工坊", "文创市集", "夜间灯光秀"] },
+                { name: "亲子家庭", value: 38, demands: ["蚝田课堂", "非遗手工", "自然观察径"] },
+                { name: "商务创客", value: 12, demands: ["共享办公", "跨境沙龙", "品质餐饮"] },
+                { name: "银发康养", value: 8, demands: ["中医理疗", "慢行步道", "康养讲座"] }
+            ]
+        };
+    }
+
+    function analyzeCompetitorFrontend() {
+        const competitors = [
+            { name: "长隆海洋王国", strategy: "做差异化文化深度游", strength: "主题公园+酒店", weakness: "文化体验薄弱" },
+            { name: "励骏庞都广场", strategy: "沉浸式文化+夜游", strength: "葡式建筑+零售", weakness: "业态单一" },
+            { name: "花海长廊", strategy: "强化故事全年运营", strength: "自然观光", weakness: "无文化IP" },
+            { name: "横琴码头驿站", strategy: "联动码头枢纽", strength: "滨水休闲", weakness: "设施陈旧" }
+        ];
+        const radarData = { self: [96,89,94,91,78,97], avg: [58,69,66,74,82,52] };
+        return { competitors, radarData };
+    }
+
+    // 渲染文化图谱
+    function renderCultureResult(data) {
+        const container = document.getElementById('cultureResult');
+        container.innerHTML = `
+            <div class="insight-card"><div class="card-header">🔍 高频文化关键词</div><div style="padding:20px">${data.keywords.map(k=>`<span class="tool-tag">${k}</span>`).join('')}</div></div>
+            <div class="insight-card"><div class="card-header">📊 文化类型占比</div><div id="typePieChart" class="graph-container"></div></div>
+            <div class="insight-card"><div class="card-header">📅 文化影响力时间轴</div><div id="timelineChart" class="graph-container"></div></div>
+            <div class="insight-card"><div class="card-header">📍 空间节点引力值</div><div id="spaceChart" class="graph-container"></div></div>
+            <div class="insight-card"><div class="card-header">🔗 文化知识图谱 (可拖拽)</div><div id="kgGraph" class="graph-container" style="height:360px;"></div></div>
+        `;
+        echarts.init(document.getElementById('typePieChart')).setOption({ series:[{ type:'pie', data:data.types, label:{ color:'#DDD' } }], backgroundColor:'transparent' });
+        echarts.init(document.getElementById('timelineChart')).setOption({ xAxis:{ data:data.timeline.eras }, yAxis:{}, series:[{ type:'bar', data:data.timeline.data, itemStyle:{ color:'#F0B84D' } }] });
+        echarts.init(document.getElementById('spaceChart')).setOption({ xAxis:{ data:data.spaceNodes.nodes }, yAxis:{}, series:[{ type:'bar', data:data.spaceNodes.values, itemStyle:{ color:'#CA913F' } }] });
+        echarts.init(document.getElementById('kgGraph')).setOption({ series:[{ type:'graph', layout:'force', roam:true, draggable:true, data:data.kg.nodes, links:data.kg.links, label:{ color:'#DDD' }, lineStyle:{ color:'#F0B84D' } }] });
+        document.getElementById('fileStatusBadge').innerHTML = '<span class="status-badge status-success"></span> 已解析';
+    }
+
+    function renderCrowdResult(data) {
+        const container = document.getElementById('crowdResult');
+        container.innerHTML = `
+            <div class="insight-card"><div class="card-header">👥 客群聚类占比</div><div id="clusterPie" class="graph-container"></div></div>
+            <div class="insight-card"><div class="card-header">📋 需求预测与业态建议</div><div style="padding:20px"><ul>${data.clusters.map(c => `<li><strong>${c.name} (${c.value}%)</strong>：${c.demands.join('、')}</li>`).join('')}</ul></div></div>
+        `;
+        echarts.init(document.getElementById('clusterPie')).setOption({ series:[{ type:'pie', data:data.clusters.map(c=>({name:c.name,value:c.value})), label:{ color:'#DDD' } }] });
+        document.getElementById('socialStatusBadge').innerHTML = '<span class="status-badge status-success"></span> 已分析';
+    }
+
+    function renderCompetitorResult(data) {
+        const container = document.getElementById('competitorResult');
+        container.innerHTML = `
+            <div class="insight-card"><div class="card-header">📡 竞品雷达图</div><div id="radarChart" class="graph-container"></div></div>
+            <div class="insight-card"><div class="card-header">🎯 差异化竞争力矩阵</div><div style="padding:20px"><table><thead><tr><th>竞品名称</th><th>核心优势</th><th>主要劣势</th><th>策略启示</th></tr></thead><tbody>${data.competitors.map(c => `<tr><td>${c.name}</td><td>${c.strength}</td><td>${c.weakness}</td><td>${c.strategy}</td></tr>`).join('')}</tbody></tr><div class="data-preview" style="margin-top:20px;"><strong>🚏 区域游线联动方案</strong><br>半日游线：相思瀑布(光影) → 蚝文化美食街 → 旧村艺术工坊 → 码头夜游；全日游线+大横琴山徒步；推出「琴澳文化护照」联票。</div></div></div>
+        `;
+        echarts.init(document.getElementById('radarChart')).setOption({
+            radar: { indicator: [{ name:'文化独特性'},{ name:'夜游潜力'},{ name:'亲子研学'},{ name:'餐饮体验'},{ name:'交通便利'},{ name:'艺术IP'}], shape: 'circle', name: { textStyle: { color: '#DDD' } } },
+            series: [{ type: 'radar', data: [{ value: data.radarData.self, name: '红旗村' }, { value: data.radarData.avg, name: '竞品均值' }] }]
+        });
+        document.getElementById('govStatusBadge').innerHTML = '<span class="status-badge status-success"></span> 已分析';
+    }
+
+    // 文件读取
+    function readFileAsText(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = e => resolve(e.target.result);
+            reader.onerror = e => reject(e);
+            reader.readAsText(file, 'UTF-8');
+        });
+    }
+
+    // 事件绑定
+    document.getElementById('analyzeCultureBtn').addEventListener('click', async () => {
+        const text = document.getElementById('cultureText').value;
+        const file = document.getElementById('cultureFile').files[0];
+        let content = text;
+        if (file && !text) {
+            try {
+                content = await readFileAsText(file);
+                document.getElementById('cultureText').value = content;
+            } catch(e) { alert('文件读取失败'); return; }
+        }
+        if (!content.trim()) { alert('请上传文件或输入文本'); return; }
+        document.getElementById('cultureResult').innerHTML = '<div class="loading"><i class="fas fa-spinner fa-pulse"></i> AI文化解析中...</div>';
+        setTimeout(() => {
+            const result = analyzeCultureFrontend(content);
+            renderCultureResult(result);
+        }, 100);
+    });
+
+    document.getElementById('analyzeCrowdBtn').addEventListener('click', () => {
+        document.getElementById('crowdResult').innerHTML = '<div class="loading"><i class="fas fa-spinner fa-pulse"></i> 聚类分析中...</div>';
+        setTimeout(() => {
+            const result = analyzeCrowdFrontend();
+            renderCrowdResult(result);
+        }, 100);
+    });
+
+    document.getElementById('analyzeCompetitorBtn').addEventListener('click', () => {
+        document.getElementById('competitorResult').innerHTML = '<div class="loading"><i class="fas fa-spinner fa-pulse"></i> 竞品分析中...</div>';
+        setTimeout(() => {
+            const result = analyzeCompetitorFrontend();
+            renderCompetitorResult(result);
+        }, 100);
+    });
+
+    // 标签切换
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.addEventListener('click', () => {
+            const tab = item.dataset.tab;
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            item.classList.add('active');
+            document.getElementById('culturePanel').style.display = tab === 'culture' ? 'block' : 'none';
+            document.getElementById('crowdPanel').style.display = tab === 'crowd' ? 'block' : 'none';
+            document.getElementById('competitorPanel').style.display = tab === 'competitor' ? 'block' : 'none';
+        });
+    });
+
+    // 预设示例文本
+    document.getElementById('cultureText').value = `横琴红旗村拥有丰富的文化资源：蚝非遗（横琴蚝养殖历史超400年，蚝壳砌墙民俗）、仙女赠琴传说（相思瀑布起源，琴澳同源象征）、葡文碑刻（清光绪年间，见证中葡文化交流）、古琴艺术（岭南琴派，与澳门琴人往来）。自然景观有相思瀑布，背靠大横琴山。空间节点包括旧村、码头、宝中路美食街。游客评论中“怀旧”“期待”情绪强烈。`;
+</script>
+</body>
+</html>
